@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31911.196
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDR_GraphMix", "DDR_GraphMix\DDR_GraphMix.csproj", "{74375CBF-D3DB-42AC-B78F-ADCD9E1AD893}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDR_GraphMix", "DDR_GraphMix\DDR_GraphMix.csproj", "{C85EBC91-DD66-48AD-B479-9F0267E21102}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{74375CBF-D3DB-42AC-B78F-ADCD9E1AD893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{74375CBF-D3DB-42AC-B78F-ADCD9E1AD893}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{74375CBF-D3DB-42AC-B78F-ADCD9E1AD893}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{74375CBF-D3DB-42AC-B78F-ADCD9E1AD893}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C85EBC91-DD66-48AD-B479-9F0267E21102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C85EBC91-DD66-48AD-B479-9F0267E21102}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C85EBC91-DD66-48AD-B479-9F0267E21102}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C85EBC91-DD66-48AD-B479-9F0267E21102}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {6A408EC1-D4A5-4DF2-85E4-A98B634AA108}
+		SolutionGuid = {195BFF62-7954-4A87-A464-59C5B8286FCE}
 	EndGlobalSection
 EndGlobal
