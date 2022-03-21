@@ -9,12 +9,12 @@ namespace DDR_GraphMix
         {
             using (StreamReader streamReader = new StreamReader(@"Resources\out.ego-gplus"))
             {
-                //while (!streamReader.EndOfStream)
-                //{
-                //    //Trim to remove white-space characters at the start and end
-                //    //Console.WriteLine(streamReader.ReadLine());
-                //    string ligne = streamReader.ReadLine();
-                //}
+                while (!streamReader.EndOfStream)
+                {
+                    string ligne = streamReader.ReadLine();
+
+                    Console.WriteLine(ligne);
+                }
             }
         }
     }
