@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace DDR_GraphMix
 {
@@ -6,7 +7,15 @@ namespace DDR_GraphMix
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello Raclette!");
+            using (StreamReader streamReader = new StreamReader(@"Resources\out.ego-gplus"))
+            {
+                //while (!streamReader.EndOfStream)
+                //{
+                //    //Trim to remove white-space characters at the start and end
+                //    //Console.WriteLine(streamReader.ReadLine());
+                //    string ligne = streamReader.ReadLine();
+                //}
+            }
         }
     }
 }
