@@ -23,7 +23,10 @@ namespace DDR_GraphMix
             Console.WriteLine("--------------------------------------");
             graph = new Dictionary<int, List<int>>();
 
+<<<<<<< Updated upstream
             //using (StreamReader streamReader = new StreamReader(@"Resources\exemple"))
+=======
+>>>>>>> Stashed changes
             using (StreamReader streamReader = new StreamReader(@"Resources\out.ego-gplus"))
             {
                 while (!streamReader.EndOfStream)
