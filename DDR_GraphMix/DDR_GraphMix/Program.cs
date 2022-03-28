@@ -15,11 +15,15 @@ namespace DDR_GraphMix
         static Dictionary<int, int> vertexDegenerationTable;
         static int DegenerationNumber = 0;
 
-        static void Main(string[] args)
+        static void Main()
         {
+            Console.WriteLine("--------------------------------------");
+            Console.WriteLine("| Filling in the table from the file |");
+            Console.WriteLine("--------------------------------------");
             graph = new Dictionary<int, List<int>>();
 
-            using (StreamReader streamReader = new StreamReader(@"Resources\exemple"))
+            //using (StreamReader streamReader = new StreamReader(@"Resources\exemple"))
+            using (StreamReader streamReader = new StreamReader(@"Resources\out.ego-gplus"))
             {
                 while (!streamReader.EndOfStream)
                 {
@@ -65,6 +69,10 @@ namespace DDR_GraphMix
         /// </summary>
         static void DisplayGraph()
         {
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("| Displaying the loaded graph |");
+            Console.WriteLine("-------------------------------");
+
             foreach (int key in graph.Keys) // for each keys
             {
                 List<int> list = graph[key]; // get all nextNode of the key
@@ -82,6 +90,12 @@ namespace DDR_GraphMix
         /// </summary>
         static void VertexDegenerationFilling()
         {
+            Console.WriteLine("---------------------------------------------------------");
+            Console.WriteLine("| Calculating degeneration number and filling the table |");
+            Console.WriteLine("---------------------------------------------------------");
+
+            Console.WriteLine("\n /!\\ Beware that this operation can take a long time /!\\");
+
             vertexDegenerationTable = new Dictionary<int, int>();
             Dictionary<int, List<int>> localGraph = graph.ToDictionary(entry => entry.Key, entry => entry.Value);
             int k = 0;
@@ -118,11 +132,16 @@ namespace DDR_GraphMix
                 }
             }
 
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("| Displaying degeneration for each vertex |");
+            Console.WriteLine("-------------------------------------------");
+
             foreach (int key in vertexDegenerationTable.Keys.OrderBy(key => key))
             {
                 Console.WriteLine(key + "\t" + vertexDegenerationTable[key]);
             }
-            Console.WriteLine("Degeneration : " + k);
+
+            Console.WriteLine("\nThe degeneration number is  : " + k + "\n");
             DegenerationNumber = k;
         }
 
@@ -138,6 +157,9 @@ namespace DDR_GraphMix
             // the pdf content
             PdfContentByte cb = writer.DirectContent;
 
+            Console.WriteLine("-----------------------------------------------");
+            Console.WriteLine("| Create table k --> number of k-degeneration |");
+            Console.WriteLine("-----------------------------------------------");
 
             // create table k --> number of k-degeneration
             Dictionary<int, int> kNumbers = new Dictionary<int, int>();
@@ -152,14 +174,15 @@ namespace DDR_GraphMix
                     kNumbers[vertexDegenerationTable[key]]++;
                 }
             }
-            
+
+            Console.WriteLine("---------------------");
+            Console.WriteLine("| PDF file creation |");
+            Console.WriteLine("---------------------");
 
             int maxCircleSize = (int)(document.GetRight(-10) / 2) * 80 /100;
             int minCircleSize = 150;
             foreach (int key in kNumbers.Keys.OrderBy(key => key)) // circles for loop
             {
-                //Console.WriteLine(key + "\t" + kNumbers[key]);
-                
                 // circles creation
                 int circleSize = maxCircleSize / DegenerationNumber * (DegenerationNumber - key) + minCircleSize;
                 cb.SetColorStroke(new BaseColor(183, 3, 223));
@@ -169,18 +192,21 @@ namespace DDR_GraphMix
 
                 double angle = Math.PI * (360.0 / kNumbers[key]) / 180.0; // angle in rad
 
-                //for (int i = 1; i <= kNumbers[key]; i++) // points for loop
                 int i = 0;
                 foreach(int v in vertexDegenerationTable.Keys)
                 {
                     if(vertexDegenerationTable[v] == key)
                     {
                         // calculate the position of the little circles with initial position and angle
-                        //Console.WriteLine(angle * i);
                         double posX = (double)(document.GetRight(-10) / 2 + circleSize * Math.Cos(angle * i));
                         double posY = (double)(document.GetTop(-10) / 2 + circleSize * Math.Sin(angle * i));
-                        //Console.WriteLine(posX + "\t" + posY + "\t" + angle + "\t" + i);
-                        cb.Circle(posX, posY, 5); // TODO : Adpat the size
+
+                        double elemtSize = 75 / DegenerationNumber;
+                        if(elemtSize < 5)
+                        {
+                            elemtSize = 5;
+                        }
+                        cb.Circle(posX, posY, elemtSize);
 
                         cb.SetColorFill(new BaseColor(0, 0, 0));
                         cb.Fill();
@@ -190,8 +216,8 @@ namespace DDR_GraphMix
 
                         cb.BeginText();
                         cb.SetColorFill(new BaseColor(255, 255, 255));
-                        cb.SetFontAndSize(BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED), 3);
-                        cb.ShowTextAligned(Element.ALIGN_CENTER, v.ToString(), (float)posX, (float)posY - 1, 0);
+                        cb.SetFontAndSize(BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED), (float)elemtSize - 2);
+                        cb.ShowTextAligned(Element.ALIGN_CENTER, v.ToString(), (float)posX, (float)(posY - elemtSize / 5), 0);
                         cb.EndText();
                         i++;
                     }
