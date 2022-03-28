@@ -26,6 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Resources\exemple.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\meta.ego-gplus">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
