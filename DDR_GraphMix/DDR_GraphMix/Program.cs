@@ -13,12 +13,13 @@ namespace DDR_GraphMix
     {
         static Dictionary<int, List<int>> graph = new Dictionary<int, List<int>>();
         static Dictionary<int, int> vertexDegenerationTable;
+        static int DegenerationNumber = 0;
 
         static void Main(string[] args)
         {
             graph = new Dictionary<int, List<int>>();
 
-            using (StreamReader streamReader = new StreamReader(@"Resources\out.ego-gplus"))
+            using (StreamReader streamReader = new StreamReader(@"Resources\exemple"))
             {
                 while (!streamReader.EndOfStream)
                 {
@@ -36,7 +37,7 @@ namespace DDR_GraphMix
                 }
             }
             //DisplayGraph();
-            //VertexDegenerationFilling();
+            VertexDegenerationFilling();
             CreatePDF();
         }
 
@@ -83,7 +84,7 @@ namespace DDR_GraphMix
         {
             vertexDegenerationTable = new Dictionary<int, int>();
             Dictionary<int, List<int>> localGraph = graph.ToDictionary(entry => entry.Key, entry => entry.Value);
-            int k = 1;
+            int k = 0;
 
             while (localGraph.Count != 0)
             {
@@ -122,13 +123,14 @@ namespace DDR_GraphMix
                 Console.WriteLine(key + "\t" + vertexDegenerationTable[key]);
             }
             Console.WriteLine("Degeneration : " + k);
+            DegenerationNumber = k;
         }
 
         static void CreatePDF()
         {
             string pdfFile = @"Resources\export.pdf";
 
-            Document document = new Document(PageSize.A4, 10, 10, 10, 10);
+            Document document = new Document(PageSize.A0, 10, 10, 10, 10);
             FileStream fs = new FileStream(pdfFile, FileMode.Create, FileAccess.Write);
             PdfWriter writer = PdfWriter.GetInstance(document, fs);
             document.Open();
@@ -136,16 +138,65 @@ namespace DDR_GraphMix
             // the pdf content
             PdfContentByte cb = writer.DirectContent;
 
-            cb.SetColorStroke(new BaseColor(183, 3, 223));
-            cb.Circle(document.GetRight(-10) / 2, document.GetTop(-10) / 2, 50);
-            cb.Stroke();
-            cb.SetColorStroke(new BaseColor(179, 1, 191));
-            cb.Circle(document.GetRight(-10) / 2, document.GetTop(-10) / 2, 100);
-            cb.Stroke();
-            cb.SetColorStroke(new BaseColor(242, 3, 255));
-            cb.Circle(document.GetRight(-10) / 2, document.GetTop(-10) / 2, 150);
-            cb.Stroke();
 
+            // create table k --> number of k-degeneration
+            Dictionary<int, int> kNumbers = new Dictionary<int, int>();
+            foreach (int key in vertexDegenerationTable.Keys.OrderBy(key => key))
+            {
+                if (!kNumbers.ContainsKey(vertexDegenerationTable[key]))
+                {
+                    kNumbers.Add(vertexDegenerationTable[key], 1);
+                }
+                else
+                {
+                    kNumbers[vertexDegenerationTable[key]]++;
+                }
+            }
+            
+
+            int maxCircleSize = (int)(document.GetRight(-10) / 2) * 80 /100;
+            int minCircleSize = 150;
+            foreach (int key in kNumbers.Keys.OrderBy(key => key)) // circles for loop
+            {
+                //Console.WriteLine(key + "\t" + kNumbers[key]);
+                
+                // circles creation
+                int circleSize = maxCircleSize / DegenerationNumber * (DegenerationNumber - key) + minCircleSize;
+                cb.SetColorStroke(new BaseColor(183, 3, 223));
+                
+                cb.Circle(document.GetRight(-10) / 2, document.GetTop(-10) / 2, circleSize);
+                cb.Stroke();
+
+                double angle = Math.PI * (360.0 / kNumbers[key]) / 180.0; // angle in rad
+
+                //for (int i = 1; i <= kNumbers[key]; i++) // points for loop
+                int i = 0;
+                foreach(int v in vertexDegenerationTable.Keys)
+                {
+                    if(vertexDegenerationTable[v] == key)
+                    {
+                        // calculate the position of the little circles with initial position and angle
+                        //Console.WriteLine(angle * i);
+                        double posX = (double)(document.GetRight(-10) / 2 + circleSize * Math.Cos(angle * i));
+                        double posY = (double)(document.GetTop(-10) / 2 + circleSize * Math.Sin(angle * i));
+                        //Console.WriteLine(posX + "\t" + posY + "\t" + angle + "\t" + i);
+                        cb.Circle(posX, posY, 5); // TODO : Adpat the size
+
+                        cb.SetColorFill(new BaseColor(0, 0, 0));
+                        cb.Fill();
+
+                        cb.SetColorStroke(new BaseColor(0, 0, 0));
+                        cb.Stroke();
+
+                        cb.BeginText();
+                        cb.SetColorFill(new BaseColor(255, 255, 255));
+                        cb.SetFontAndSize(BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED), 3);
+                        cb.ShowTextAligned(Element.ALIGN_CENTER, v.ToString(), (float)posX, (float)posY - 1, 0);
+                        cb.EndText();
+                        i++;
+                    }
+                }
+            }
             document.Close();
             fs.Close();
             writer.Close();
