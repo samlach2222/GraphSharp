@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.Metadata;
 using Document = iTextSharp.text.Document;
+using static DDR_GraphMix.Dsatur;
 
 namespace DDR_GraphMix
 {
@@ -23,8 +23,8 @@ namespace DDR_GraphMix
             Console.WriteLine("--------------------------------------");
             graph = new Dictionary<int, List<int>>();
 
-            //using (StreamReader streamReader = new StreamReader(@"Resources\exemple"))
-            using (StreamReader streamReader = new StreamReader(@"Resources\out.ego-gplus"))
+            using (StreamReader streamReader = new StreamReader(@"Resources\exemple.txt"))
+            //using (StreamReader streamReader = new StreamReader(@"Resources\out.ego-gplus"))
             {
                 while (!streamReader.EndOfStream)
                 {
@@ -42,9 +42,10 @@ namespace DDR_GraphMix
                 }
             }
             //DisplayGraph();
-            VertexDegenerationFilling();
-            CreatePDF();
+            //VertexDegenerationFilling();
+            //CreatePDF();
             //VertexDegenerationFillingMatulaBeck();
+            Dsatur d = new Dsatur(graph);
         }
 
         /// <summary>
