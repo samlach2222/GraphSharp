@@ -396,6 +396,7 @@ namespace DDR_GraphMix
                 Console.WriteLine("3. Calculate chromatic number\n");
                 Console.WriteLine("4. Generate a PDF with vertex degeneration\n");
                 Console.WriteLine("5. Compare degeneration and chromatic numbers for a lots of graphs\n");
+                Console.WriteLine("6. CCalculate degeneration number with Matula Beck Algorithm\n");
                 int choice = Int32.Parse(Console.ReadLine());
 
                 switch (choice)
@@ -427,6 +428,12 @@ namespace DDR_GraphMix
                         break;
                     case 5:
                         CompareDegenerationAndChromaticNumber();
+                        returnValue = false;
+                        break;
+                    case 6:
+                        string file5 = SelectFile();
+                        ReadFile(file5);
+                        VertexDegenerationFillingMatulaBeck();
                         returnValue = false;
                         break;
                     default:
