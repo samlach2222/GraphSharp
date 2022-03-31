@@ -72,7 +72,7 @@ namespace DDR_GraphMix
             Console.WriteLine("| Calculating degeneration number and filling the table |");
             Console.WriteLine("---------------------------------------------------------");
 
-            Console.WriteLine("\n /!\\ Beware that this operation can take a long time /!\\");
+            Console.WriteLine(" /!\\ Beware that this operation can take a long time /!\\");
 
             vertexDegenerationTable = new Dictionary<int, int>();
 
@@ -80,8 +80,12 @@ namespace DDR_GraphMix
             Dictionary<int, List<int>> localGraph = graph.ToDictionary(entry => entry.Key, entry => new List<int>(entry.Value));
             int k = 0;
 
+            int localGraphInitialSize = localGraph.Count;
+
             while (localGraph.Count != 0)
             {
+               Console.Write("\rk : " + k + " --> 0 (" + (localGraphInitialSize - localGraph.Count) + "/" + localGraphInitialSize + ")" + "\u001b[K");  //Clear the right of the line
+
                 // filling a list with all key we have to delete
                 List<int> removeKeys = new List<int>();
                 foreach (int key in localGraph.Keys) // for each keys
@@ -90,8 +94,11 @@ namespace DDR_GraphMix
                     if (list.Count <= k)
                     {
                         removeKeys.Add(key);
+                        Console.Write("\rk : " + k + " --> " + removeKeys.Count + " (" + (localGraphInitialSize - localGraph.Count) + "/" + localGraphInitialSize + ")");
                     }
                 }
+
+                int removeKeysCount = removeKeys.Count;
 
                 // Delete keys and delete values in nextnodes values
                 foreach (int key in removeKeys) // for each keys
@@ -103,6 +110,8 @@ namespace DDR_GraphMix
                         list.Remove(key);
                     }
                     vertexDegenerationTable.Add(key, k);
+
+                    Console.Write("\rk : " + k + " --> " + removeKeysCount + " (" + (localGraphInitialSize - localGraph.Count) + "/" + localGraphInitialSize + ")");
                 }
 
                 if (removeKeys.Count == 0)
@@ -111,7 +120,7 @@ namespace DDR_GraphMix
                 }
             }
 
-            Console.WriteLine("\nThe degeneration number is  : " + k + "\n");
+            Console.WriteLine("\nThe degeneration number is : " + k + "\n");
             DegenerationNumber = k;
         }
 
