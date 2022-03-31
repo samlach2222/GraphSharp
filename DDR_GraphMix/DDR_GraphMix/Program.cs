@@ -22,12 +22,24 @@ namespace DDR_GraphMix
             Console.WriteLine("| Filling in the table from the file |");
             Console.WriteLine("--------------------------------------");
             graph = new Dictionary<int, List<int>>();
+            //const string filePath = @"Resources\exemple.txt";
+            const string filePath = @"Resources\out.ego-gplus";
 
-            using (StreamReader streamReader = new StreamReader(@"Resources\exemple.txt"))
-            //using (StreamReader streamReader = new StreamReader(@"Resources\out.ego-gplus"))
+            //Number of lines
+            int numberOfLines = 0;
+            using (StreamReader streamReader = new StreamReader(filePath))
             {
+                while (streamReader.ReadLine() != null) { numberOfLines++; }
+            }
+
+            //Reading lines
+            using (StreamReader streamReader = new StreamReader(filePath))
+            {
+                int i = 0;
                 while (!streamReader.EndOfStream)
                 {
+                    i++;
+                    Console.Write("\r"+i+"/"+numberOfLines);
                     string readLine = streamReader.ReadLine();
                     if (!readLine.StartsWith("%") && readLine != "") // read lines except lines who begin with "%"
                     {
@@ -40,6 +52,8 @@ namespace DDR_GraphMix
                         Insert(nextNode, curNode); // insert ints into 
                     }
                 }
+                Console.WriteLine();  //Line break
+                Console.WriteLine();  //Line break
             }
             //DisplayGraph();
             //VertexDegenerationFilling();
