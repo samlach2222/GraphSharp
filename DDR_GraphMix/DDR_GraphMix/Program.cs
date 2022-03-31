@@ -25,21 +25,13 @@ namespace DDR_GraphMix
             //const string filePath = @"Resources\exemple.txt";
             const string filePath = @"Resources\out.ego-gplus";
 
-            //Number of lines
-            int numberOfLines = 0;
-            using (StreamReader streamReader = new StreamReader(filePath))
-            {
-                while (streamReader.ReadLine() != null) { numberOfLines++; }
-            }
-
             //Reading lines
             using (StreamReader streamReader = new StreamReader(filePath))
             {
-                int i = 0;
+                long fileLength = streamReader.BaseStream.Length;
                 while (!streamReader.EndOfStream)
                 {
-                    i++;
-                    Console.Write("\r"+i+"/"+numberOfLines);
+                    Console.Write("\r"+streamReader.BaseStream.Position+"/"+fileLength);
                     string readLine = streamReader.ReadLine();
                     if (!readLine.StartsWith("%") && readLine != "") // read lines except lines who begin with "%"
                     {
