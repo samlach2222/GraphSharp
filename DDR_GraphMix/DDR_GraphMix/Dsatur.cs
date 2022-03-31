@@ -99,6 +99,7 @@ namespace DDR_GraphMix
             while (finded);
             return k + 1;
         }
+
         void Colorexact(int k) // Test if the graph has a k-colouring by trying all combinations
         {
             for (int i = 0; i < n; i++)
