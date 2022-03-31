@@ -14,6 +14,7 @@ namespace DDR_GraphMix
         private readonly int n; // Number of vertices
         private readonly int[][] adj; //[n][n];  // Graph adjacency matrix
         private bool finded = false; // Allows to stop the exact algorithm when a colouring has been found
+        private int k; // k-degeneration
 
         private int CalculateDsatur()
         {
@@ -151,7 +152,6 @@ namespace DDR_GraphMix
 
         public Dsatur(Dictionary<int, List<int>> graph)
         {
-            int k;
             int nbc;
 
             // Filling of adj
@@ -202,15 +202,23 @@ namespace DDR_GraphMix
             DSAT = new List<int>();
             Degree = new List<int>();
 
+            // DSATUR Calculation
             k = CalculateDsatur();
-            Console.WriteLine("DSAT Algorithm : Colouring in " + k + " colours : ");
             for (int i = 0; i < n; i++)
             {
-                Console.WriteLine("colours of " + i + " : " + color2[i]);
+                //Console.WriteLine("colours of " + i + " : " + color2[i]);
             }
+            Console.WriteLine("DSAT Algorithm : Colouring in " + k + " colours.");
 
-            nbc = ChromaticNumber(k);
-            Console.WriteLine("Chromatic number : " + nbc);
+
+            // ColorExact calculation
+            //nbc = ChromaticNumber(k);
+            //Console.WriteLine("Chromatic number : " + nbc);
         }
+        public int getK()
+        {
+            return this.k;
+        }
+        
     }
 }

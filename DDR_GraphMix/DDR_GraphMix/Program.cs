@@ -13,7 +13,8 @@ namespace DDR_GraphMix
     {
         static Dictionary<int, List<int>> graph = new Dictionary<int, List<int>>();
         static Dictionary<int, int> vertexDegenerationTable;
-        static List<int> vertexDegenerationTableMatulaBeck;
+        static readonly List<int> vertexDegenerationTableMatulaBeck;
+        static readonly List<string> dataFiles = new List<string>();
         static int DegenerationNumber = 0;
 
         static void Main()
@@ -22,11 +23,10 @@ namespace DDR_GraphMix
             Console.WriteLine("| Filling in the table from the file |");
             Console.WriteLine("--------------------------------------");
             graph = new Dictionary<int, List<int>>();
-            //const string filePath = @"Resources\exemple.txt";
-            const string filePath = @"Resources\out.ego-gplus";
 
-            //Reading lines
-            using (StreamReader streamReader = new StreamReader(filePath))
+            //using (StreamReader streamReader = new StreamReader(@"Resources\out.moreno_innovation_innovation"))
+            using (StreamReader streamReader = new StreamReader(@"Resources\exemple.txt"))
+            //using (StreamReader streamReader = new StreamReader(@"Resources\out.ego-gplus"))
             {
                 long fileLength = streamReader.BaseStream.Length;
                 while (!streamReader.EndOfStream)
@@ -51,7 +51,8 @@ namespace DDR_GraphMix
             //VertexDegenerationFilling();
             //CreatePDF();
             //VertexDegenerationFillingMatulaBeck();
-            Dsatur d = new Dsatur(graph);
+            //Dsatur d = new Dsatur(graph);
+            CompareDegenerationAndChromaticNumber();
         }
 
         /// <summary>
@@ -106,7 +107,9 @@ namespace DDR_GraphMix
             Console.WriteLine("\n /!\\ Beware that this operation can take a long time /!\\");
 
             vertexDegenerationTable = new Dictionary<int, int>();
-            Dictionary<int, List<int>> localGraph = graph.ToDictionary(entry => entry.Key, entry => entry.Value);
+
+            // copy graph
+            Dictionary<int, List<int>> localGraph = graph.ToDictionary(entry => entry.Key, entry => new List<int>(entry.Value));
             int k = 0;
 
             while (localGraph.Count != 0)
@@ -147,7 +150,7 @@ namespace DDR_GraphMix
 
             foreach (int key in vertexDegenerationTable.Keys.OrderBy(key => key))
             {
-                Console.WriteLine(key + "\t" + vertexDegenerationTable[key]);
+                //Console.WriteLine(key + "\t" + vertexDegenerationTable[key]);
             }
 
             Console.WriteLine("\nThe degeneration number is  : " + k + "\n");
@@ -293,6 +296,62 @@ namespace DDR_GraphMix
                         }
                     }
                 }
+            }
+        }
+
+        static void FillingDataSets()
+        {
+            dataFiles.Add("out.moreno_innovation_innovation");
+            dataFiles.Add("exemple.txt");
+            dataFiles.Add("out.ego-gplus");
+
+        }
+
+        static void CompareDegenerationAndChromaticNumber()
+        {
+            List<List<string>> comparaison = new List<List<string>>();
+            
+            FillingDataSets();
+            foreach(string file in dataFiles)
+            {
+                // reset
+                graph = new Dictionary<int, List<int>>();
+                DegenerationNumber = 0;
+
+                using (StreamReader streamReader = new StreamReader(@"Resources\" + file))
+                {
+                    while (!streamReader.EndOfStream)
+                    {
+                        string readLine = streamReader.ReadLine();
+                        if (!readLine.StartsWith("%") && readLine != "") // read lines except lines who begin with "%"
+                        {
+                            string[] splitedLine = readLine.Split("\t"); // get the two ints of the line
+
+                            int curNode = Int32.Parse(splitedLine[0]);
+                            int nextNode = Int32.Parse(splitedLine[1]);
+
+                            Insert(curNode, nextNode); // insert ints into 
+                            Insert(nextNode, curNode); // insert ints into 
+                        }
+                    }
+                }
+                VertexDegenerationFilling();
+                Dsatur d = new Dsatur(graph);
+                int degenerationNumber = DegenerationNumber;
+                int chromaticNumber = d.getK();
+                List<string> list = new List<string>
+                {
+                    file,
+                    degenerationNumber.ToString(),
+                    chromaticNumber.ToString()
+                };
+                comparaison.Add(list);
+            }
+
+            // display values
+            foreach(List<string> line in comparaison)
+            {
+                Console.WriteLine("\nfile : " + line[0] + "\ndegenerationNumber = " + line[1] + "\nchromaticNumber = " + line[2]);
             }
         }
     }
