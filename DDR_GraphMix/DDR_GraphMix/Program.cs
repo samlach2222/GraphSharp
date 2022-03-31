@@ -346,12 +346,12 @@ namespace DDR_GraphMix
             {
                 Console.WriteLine("CHOOSE A FILE :\n");
                 int size = dataFiles.Count;
-                for (int i = 1; i < size; i++)
+                for (int i = 1; i <= size; i++)
                 {
                     Console.WriteLine(i + ". " + dataFiles[i - 1]);
                 }
                 choice = Int32.Parse(Console.ReadLine());
-                if (choice > size - 1)
+                if (choice <= 0 || choice > size)
                 {
                     Console.WriteLine("/!\\ BAD VALUE ! /!\\");
                     returnValue = true;
