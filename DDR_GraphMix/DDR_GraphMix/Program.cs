@@ -64,7 +64,7 @@ namespace DDR_GraphMix
         }
 
         /// <summary>
-        /// 
+        /// The function is used to calculate and display the degeneration number of the current graph
         /// </summary>
         static void VertexDegenerationFilling()
         {
@@ -115,6 +115,9 @@ namespace DDR_GraphMix
             DegenerationNumber = k;
         }
 
+        /// <summary>
+        /// This function is used to create a graph named "export.pdf" with circles for k-degenerations numbers for the current graph
+        /// </summary>
         static void CreatePDF()
         {
             string pdfFile = @"Resources\export.pdf";
@@ -198,6 +201,9 @@ namespace DDR_GraphMix
             writer.Close();
         }
 
+        /// <summary>
+        /// The function is used to calculate and display the degeneration number of the current graph with Matula Beck algorithm
+        /// </summary>
         static void VertexDegenerationFillingMatulaBeck()
         {
             //Initialize an output list L
@@ -264,6 +270,9 @@ namespace DDR_GraphMix
             }
         }
 
+        /// <summary>
+        /// This function is a list with all files we want to use
+        /// </summary>
         static void FillingDataSets()
         {
             dataFiles.Add("out.moreno_innovation_innovation");
@@ -326,6 +335,10 @@ namespace DDR_GraphMix
             }
         }
 
+        /// <summary>
+        /// The function is to ask the user what file he want to use
+        /// </summary>
+        /// <returns>string filename</returns>
         static string SelectFile()
         {
             int choice;
@@ -385,6 +398,9 @@ namespace DDR_GraphMix
             }
         }
 
+        /// <summary>
+        /// The function is the display select menu for the user to help him to choose options
+        /// </summary>
         static void SelectMenu()
         {
             bool returnValue;
@@ -396,7 +412,7 @@ namespace DDR_GraphMix
                 Console.WriteLine("3. Calculate chromatic number\n");
                 Console.WriteLine("4. Generate a PDF with vertex degeneration\n");
                 Console.WriteLine("5. Compare degeneration and chromatic numbers for a lots of graphs\n");
-                Console.WriteLine("6. CCalculate degeneration number with Matula Beck Algorithm\n");
+                Console.WriteLine("6. Calculate degeneration number with Matula Beck Algorithm\n");
                 int choice = Int32.Parse(Console.ReadLine());
 
                 switch (choice)
