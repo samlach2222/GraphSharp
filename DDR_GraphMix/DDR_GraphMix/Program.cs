@@ -249,8 +249,9 @@ namespace DDR_GraphMix
             Dictionary<int, int> d = graph.ToDictionary(entry => entry.Key, entry => entry.Value.Count);
 
             //Initialize an array D such that D[i] contains a list of the vertices v that are not already in L for which dv = i
-            List<int>[] D = new List<int>[DegenerationNumber];
-            for (int i = 0; i < DegenerationNumber; i++)
+            int BiggestI = d.Values.Max();
+            List<int>[] D = new List<int>[BiggestI];
+            for (int i = 0; i < BiggestI; i++)
             {
                 D[i] = vertexDegenerationTable.Where(x => x.Value == i).Select(vDTWithValueI => vDTWithValueI.Key).ToList();
             }
@@ -296,6 +297,12 @@ namespace DDR_GraphMix
                         }
                     }
                 }
+            }
+
+            Console.WriteLine("L :");
+            foreach (int vertex in L)
+            {
+                Console.WriteLine("    "+vertex);
             }
         }
 
