@@ -19,40 +19,8 @@ namespace DDR_GraphMix
 
         static void Main()
         {
-            Console.WriteLine("--------------------------------------");
-            Console.WriteLine("| Filling in the table from the file |");
-            Console.WriteLine("--------------------------------------");
-            graph = new Dictionary<int, List<int>>();
-
-            //using (StreamReader streamReader = new StreamReader(@"Resources\out.moreno_innovation_innovation"))
-            using (StreamReader streamReader = new StreamReader(@"Resources\exemple.txt"))
-            //using (StreamReader streamReader = new StreamReader(@"Resources\out.ego-gplus"))
-            {
-                long fileLength = streamReader.BaseStream.Length;
-                while (!streamReader.EndOfStream)
-                {
-                    Console.Write("\r"+streamReader.BaseStream.Position+"/"+fileLength);
-                    string readLine = streamReader.ReadLine();
-                    if (!readLine.StartsWith("%") && readLine != "") // read lines except lines who begin with "%"
-                    {
-                        string[] splitedLine = readLine.Split("\t"); // get the two ints of the line
-
-                        int curNode = Int32.Parse(splitedLine[0]);
-                        int nextNode = Int32.Parse(splitedLine[1]);
-
-                        Insert(curNode, nextNode); // insert ints into 
-                        Insert(nextNode, curNode); // insert ints into 
-                    }
-                }
-                Console.WriteLine();  //Line break
-                Console.WriteLine();  //Line break
-            }
-            //DisplayGraph();
-            //VertexDegenerationFilling();
-            //CreatePDF();
-            //VertexDegenerationFillingMatulaBeck();
-            //Dsatur d = new Dsatur(graph);
-            CompareDegenerationAndChromaticNumber();
+            FillingDataSets();
+            SelectMenu();
         }
 
         /// <summary>
@@ -137,20 +105,10 @@ namespace DDR_GraphMix
                     vertexDegenerationTable.Add(key, k);
                 }
 
-                // 
                 if (removeKeys.Count == 0)
                 {
                     k++;
                 }
-            }
-
-            Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("| Displaying degeneration for each vertex |");
-            Console.WriteLine("-------------------------------------------");
-
-            foreach (int key in vertexDegenerationTable.Keys.OrderBy(key => key))
-            {
-                //Console.WriteLine(key + "\t" + vertexDegenerationTable[key]);
             }
 
             Console.WriteLine("\nThe degeneration number is  : " + k + "\n");
@@ -317,18 +275,22 @@ namespace DDR_GraphMix
         static void CompareDegenerationAndChromaticNumber()
         {
             List<List<string>> comparaison = new List<List<string>>();
-            
-            FillingDataSets();
             foreach(string file in dataFiles)
             {
                 // reset
                 graph = new Dictionary<int, List<int>>();
                 DegenerationNumber = 0;
 
+                Console.WriteLine("--------------------------------------");
+                Console.WriteLine("| Filling in the table from the file |");
+                Console.WriteLine("--------------------------------------");
+
                 using (StreamReader streamReader = new StreamReader(@"Resources\" + file))
                 {
+                    long fileLength = streamReader.BaseStream.Length;
                     while (!streamReader.EndOfStream)
                     {
+                        Console.Write("\r" + streamReader.BaseStream.Position + "/" + fileLength);
                         string readLine = streamReader.ReadLine();
                         if (!readLine.StartsWith("%") && readLine != "") // read lines except lines who begin with "%"
                         {
@@ -341,6 +303,8 @@ namespace DDR_GraphMix
                             Insert(nextNode, curNode); // insert ints into 
                         }
                     }
+                    Console.WriteLine();  //Line break
+                    Console.WriteLine();  //Line break
                 }
                 VertexDegenerationFilling();
                 Dsatur d = new Dsatur(graph);
@@ -360,6 +324,118 @@ namespace DDR_GraphMix
             {
                 Console.WriteLine("\nfile : " + line[0] + "\ndegenerationNumber = " + line[1] + "\nchromaticNumber = " + line[2]);
             }
+        }
+
+        static string SelectFile()
+        {
+            int choice;
+            bool returnValue;
+            do
+            {
+                Console.WriteLine("CHOOSE A FILE :\n");
+                int size = dataFiles.Capacity;
+                for (int i = 1; i < size; i++)
+                {
+                    Console.WriteLine(i + ". " + dataFiles[i - 1]);
+                }
+                choice = Int32.Parse(Console.ReadLine());
+                if (choice > size - 1)
+                {
+                    Console.WriteLine("/!\\ BAD VALUE ! /!\\");
+                    returnValue = true;
+                }
+                else
+                {
+                    returnValue = false;
+                }
+            }
+            while (returnValue);
+
+            return dataFiles[choice - 1];
+        }
+
+        static void ReadFile(string file)
+        {
+            graph = new Dictionary<int, List<int>>();
+
+            Console.WriteLine("--------------------------------------");
+            Console.WriteLine("| Filling in the table from the file |");
+            Console.WriteLine("--------------------------------------");
+
+            using (StreamReader streamReader = new StreamReader(@"Resources\" + file))
+            {
+                long fileLength = streamReader.BaseStream.Length;
+                while (!streamReader.EndOfStream)
+                {
+                    Console.Write("\r" + streamReader.BaseStream.Position + "/" + fileLength);
+                    string readLine = streamReader.ReadLine();
+                    if (!readLine.StartsWith("%") && readLine != "") // read lines except lines who begin with "%"
+                    {
+                        string[] splitedLine = readLine.Split("\t"); // get the two ints of the line
+
+                        int curNode = Int32.Parse(splitedLine[0]);
+                        int nextNode = Int32.Parse(splitedLine[1]);
+
+                        Insert(curNode, nextNode); // insert ints into 
+                        Insert(nextNode, curNode); // insert ints into 
+                    }
+                }
+                Console.WriteLine();  //Line break
+                Console.WriteLine();  //Line break
+            }
+        }
+
+        static void SelectMenu()
+        {
+            bool returnValue;
+            do
+            {
+                Console.WriteLine("WELCOME TO OUR GRAPH PROJECT, CHOOSE AN OPTION IN THE LIST :\n");
+                Console.WriteLine("1. Display the graph\n");
+                Console.WriteLine("2. Calculate degeneration number\n");
+                Console.WriteLine("3. Calculate chromatic number\n");
+                Console.WriteLine("4. Generate a PDF with vertex degeneration\n");
+                Console.WriteLine("5. Compare degeneration and chromatic numbers for a lots of graphs\n");
+                int choice = Int32.Parse(Console.ReadLine());
+
+                switch (choice)
+                {
+                    case 1:
+                        string file1 = SelectFile();
+                        ReadFile(file1);
+                        DisplayGraph();
+                        returnValue = false;
+                        break;
+                    case 2:
+                        string file2 = SelectFile();
+                        ReadFile(file2);
+                        VertexDegenerationFilling();
+                        returnValue = false;
+                        break;
+                    case 3:
+                        string file3 = SelectFile();
+                        ReadFile(file3);
+                        _ = new Dsatur(graph);
+                        returnValue = false;
+                        break;
+                    case 4:
+                        string file4 = SelectFile();
+                        ReadFile(file4);
+                        VertexDegenerationFilling();
+                        CreatePDF();
+                        returnValue = false;
+                        break;
+                    case 5:
+                        CompareDegenerationAndChromaticNumber();
+                        returnValue = false;
+                        break;
+                    default:
+                        Console.WriteLine("/!\\ BAD VALUE ! /!\\");
+                        returnValue = true;
+                        break;
+                }
+            }
+            while (returnValue);
         }
     }
 }
