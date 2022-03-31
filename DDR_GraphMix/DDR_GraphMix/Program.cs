@@ -13,7 +13,7 @@ namespace DDR_GraphMix
     {
         static Dictionary<int, List<int>> graph = new Dictionary<int, List<int>>();
         static Dictionary<int, int> vertexDegenerationTable;
-        static readonly List<int> vertexDegenerationTableMatulaBeck;
+        static List<int> vertexDegenerationTableMatulaBeck;
         static readonly List<string> dataFiles = new List<string>();
         static int DegenerationNumber = 0;
 
@@ -201,7 +201,7 @@ namespace DDR_GraphMix
         static void VertexDegenerationFillingMatulaBeck()
         {
             //Initialize an output list L
-            List<int> L = new List<int>();
+            vertexDegenerationTableMatulaBeck = new List<int>();
 
             //Compute a number dv for each vertex v in G, the number of neighbors of v that are not already in L. Initially, these numbers are just the degrees of the vertices
             Dictionary<int, int> d = graph.ToDictionary(entry => entry.Key, entry => entry.Value.Count);
@@ -224,7 +224,7 @@ namespace DDR_GraphMix
             {
                 //Scan the array cells D[0], D[1],... until finding an i for which D[i] is nonempty
                 DContainsValues = false;
-                for (int i = 0; i < DegenerationNumber; i++)
+                for (int i = 0; i < BiggestI; i++)
                 {
                     if (D[i].Any())  //If the list contains elements
                     {
@@ -235,14 +235,14 @@ namespace DDR_GraphMix
 
                         //Select a vertex v from D[i]. Add v to the beginning of L and remove it from D[i].
                         int v = D[i][0];
-                        L.Insert(0, v);
+                        vertexDegenerationTableMatulaBeck.Insert(0, v);
                         D[i].Remove(v);
 
                         //For each neighbor w of v not already in L, subtract one from dw and move w to the cell of D corresponding to the new value of dw
                         List<int> movedNeighbors = new List<int>();
                         foreach (int w in graph[v])
                         {
-                            if (!L.Contains(w))
+                            if (!vertexDegenerationTableMatulaBeck.Contains(w))
                             {
                                 d[w] -= 1;
                                 D[d[w]].Add(w);
@@ -258,7 +258,7 @@ namespace DDR_GraphMix
             }
 
             Console.WriteLine("L :");
-            foreach (int vertex in L)
+            foreach (int vertex in vertexDegenerationTableMatulaBeck)
             {
                 Console.WriteLine("    "+vertex);
             }
