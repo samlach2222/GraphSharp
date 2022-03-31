@@ -202,7 +202,7 @@ namespace DDR_GraphMix
         }
 
         /// <summary>
-        /// The function is used to calculate and display the degeneration number of the current graph with Matula Beck algorithm
+        /// The function is used to calculate and display the degeneration number of the current graph with Matula & Beck algorithm
         /// </summary>
         static void VertexDegenerationFillingMatulaBeck()
         {
@@ -212,12 +212,22 @@ namespace DDR_GraphMix
             //Compute a number dv for each vertex v in G, the number of neighbors of v that are not already in L. Initially, these numbers are just the degrees of the vertices
             Dictionary<int, int> d = graph.ToDictionary(entry => entry.Key, entry => entry.Value.Count);
 
-            //Initialize an array D such that D[i] contains a list of the vertices v that are not already in L for which dv = i
             int BiggestI = d.Values.Max();
-            List<int>[] D = new List<int>[BiggestI];
-            for (int i = 0; i < BiggestI; i++)
+
+            //Initialize an array D such that D[i] contains a list of the vertices v that are not already in L for which dv = i
+            List<int>[] D = new List<int>[BiggestI + 1];
+            for (int i = 0; i <= BiggestI; i++)
             {
-                D[i] = vertexDegenerationTable.Where(x => x.Value == i).Select(vDTWithValueI => vDTWithValueI.Key).ToList();
+                List<int> DiList = new List<int>();
+                foreach (int key in d.Keys)
+                {
+                    if (d[key] == i)
+                    {
+                        DiList.Add(key);
+                    }
+                }
+
+                D[i] = DiList;
             }
 
             //Initialize k to 0
