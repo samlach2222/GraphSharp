@@ -285,10 +285,18 @@ namespace DDR_GraphMix
         /// </summary>
         static void FillingDataSets()
         {
-            dataFiles.Add("out.moreno_innovation_innovation");
-            dataFiles.Add("exemple.txt");
-            dataFiles.Add("out.ego-gplus");
-
+            dataFiles.Add("Crime");
+            dataFiles.Add("ERoadNetworks");
+            dataFiles.Add("Exemple");
+            dataFiles.Add("Facebook");
+            dataFiles.Add("Flickr");
+            dataFiles.Add("GooglePlus");
+            dataFiles.Add("JazzMusicians");
+            dataFiles.Add("Physicians");
+            dataFiles.Add("PoliticalBooks");
+            dataFiles.Add("SisterCities");
+            dataFiles.Add("Twitter");
+            dataFiles.Add("Youtube");
         }
 
         static void CompareDegenerationAndChromaticNumber()
@@ -296,46 +304,27 @@ namespace DDR_GraphMix
             List<List<string>> comparaison = new List<List<string>>();
             foreach(string file in dataFiles)
             {
-                // reset
-                graph = new Dictionary<int, List<int>>();
-                DegenerationNumber = 0;
-
-                Console.WriteLine("--------------------------------------");
-                Console.WriteLine("| Filling in the table from the file |");
-                Console.WriteLine("--------------------------------------");
-
-                using (StreamReader streamReader = new StreamReader(@"Resources\" + file))
+                if(file != "Flickr")
                 {
-                    long fileLength = streamReader.BaseStream.Length;
-                    while (!streamReader.EndOfStream)
-                    {
-                        Console.Write("\r" + streamReader.BaseStream.Position + "/" + fileLength);
-                        string readLine = streamReader.ReadLine();
-                        if (!readLine.StartsWith("%") && readLine != "") // read lines except lines who begin with "%"
-                        {
-                            string[] splitedLine = readLine.Split("\t"); // get the two ints of the line
+                    // reset
+                    graph = new Dictionary<int, List<int>>();
+                    DegenerationNumber = 0;
 
-                            int curNode = Int32.Parse(splitedLine[0]);
-                            int nextNode = Int32.Parse(splitedLine[1]);
+                    ReadFile(file);
 
-                            Insert(curNode, nextNode); // insert ints into 
-                            Insert(nextNode, curNode); // insert ints into 
-                        }
-                    }
-                    Console.WriteLine();  //Line break
-                    Console.WriteLine();  //Line break
-                }
-                VertexDegenerationFilling();
-                Dsatur d = new Dsatur(graph);
-                int degenerationNumber = DegenerationNumber;
-                int chromaticNumber = d.getK();
-                List<string> list = new List<string>
+                    VertexDegenerationFilling();
+                    Dsatur d = new Dsatur(graph);
+                    int degenerationNumber = DegenerationNumber;
+                    int chromaticNumber = d.getK();
+                    List<string> list = new List<string>
                 {
                     file,
                     degenerationNumber.ToString(),
                     chromaticNumber.ToString()
                 };
-                comparaison.Add(list);
+                    comparaison.Add(list);
+                }
+                
             }
 
             // display values
@@ -356,7 +345,7 @@ namespace DDR_GraphMix
             do
             {
                 Console.WriteLine("CHOOSE A FILE :\n");
-                int size = dataFiles.Capacity;
+                int size = dataFiles.Count;
                 for (int i = 1; i < size; i++)
                 {
                     Console.WriteLine(i + ". " + dataFiles[i - 1]);
