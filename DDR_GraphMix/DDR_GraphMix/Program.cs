@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using Document = iTextSharp.text.Document;
 using static DDR_GraphMix.Dsatur;
+using System.Text;
 
 namespace DDR_GraphMix
 {
@@ -100,18 +101,22 @@ namespace DDR_GraphMix
 
                 int removeKeysCount = removeKeys.Count;
 
-                // Delete keys and delete values in nextnodes values
-                foreach (int key in removeKeys) // for each keys
+                using (StreamWriter consoleWriter = new StreamWriter(Console.OpenStandardOutput(), Encoding.UTF8, 1024*10))
                 {
-                    localGraph.Remove(key);
-                    foreach (int row in localGraph.Keys)
+                    // Delete keys and delete values in nextnodes values
+                    foreach (int key in removeKeys) // for each keys
                     {
-                        List<int> list = localGraph[row]; // get all nextNode of the key
-                        list.Remove(key);
-                    }
-                    vertexDegenerationTable.Add(key, k);
+                        localGraph.Remove(key);
+                        foreach (int row in localGraph.Keys)
+                        {
+                            List<int> list = localGraph[row]; // get all nextNode of the key
+                            list.Remove(key);
+                        }
+                        vertexDegenerationTable.Add(key, k);
 
-                    Console.Write("\rk : " + k + " --> " + removeKeysCount + " (" + (localGraphInitialSize - localGraph.Count) + "/" + localGraphInitialSize + ")");
+                        consoleWriter.Write("\rk : " + k + " --> " + removeKeysCount + " (" + (localGraphInitialSize - localGraph.Count) + "/" + localGraphInitialSize + ")\u001b[K");  //Clear the right of the line, as consoleWriter sometimes causes artifacts
+                    }
+                    //No need to flush consoleWriter, it already does it when exiting the using
                 }
 
                 if (removeKeys.Count == 0)
