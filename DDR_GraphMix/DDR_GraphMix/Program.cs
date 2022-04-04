@@ -362,7 +362,26 @@ namespace DDR_GraphMix
                 int size = dataFiles.Count;
                 for (int i = 1; i <= size; i++)
                 {
-                    Console.WriteLine(i + ". " + dataFiles[i - 1]);
+                    string fileName = @"Resources\" + dataFiles[i - 1];
+                    FileInfo fi = new FileInfo(fileName);
+                    double fileSize = fi.Length;
+                    string tabulation = "\t";
+                    if(fileName.Length < 11 + 7) // 11 is for the Resources\\
+                    {
+                        tabulation = "\t\t";
+                    }
+                    if(fileSize < 1024)
+                    {
+                        Console.WriteLine(i + ". " + "\t" + dataFiles[i - 1] + tabulation + Math.Round((double)fi.Length, 1) + " o");
+                    }
+                    else if (fileSize < 1048576)
+                    {
+                        Console.WriteLine(i + ". " + "\t" + dataFiles[i - 1] + tabulation + Math.Round((double)fi.Length / 1024, 1) + " Ko");
+                    }
+                    else
+                    {
+                        Console.WriteLine(i + ". " + "\t" + dataFiles[i - 1] + tabulation + Math.Round((double)fi.Length / 1048576, 1) + " Mo");
+                    }
                 }
                 choice = Int32.Parse(Console.ReadLine());
                 if (choice <= 0 || choice > size)
