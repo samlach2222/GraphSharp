@@ -152,6 +152,10 @@ namespace DDR_GraphMix
 
         public Dsatur(Dictionary<int, List<int>> graph)
         {
+            Console.WriteLine("--------------------------------");
+            Console.WriteLine("| Calculating chromatic number |");
+            Console.WriteLine("--------------------------------");
+
             int nbc;
 
             // Filling of adj
@@ -172,6 +176,7 @@ namespace DDR_GraphMix
             n = allValues.Count;
             adj = new int[n][];
 
+            Console.Write("\r1/3...");
             for (int i = 0; i < allValues.Count; i++)
             {
                 for (int j = 0; j < allValues.Count; j++)
@@ -196,6 +201,7 @@ namespace DDR_GraphMix
                     }
                 }
             }
+            Console.Write("\r2/3...");
 
             color1 = new List<int>(); 
             color2 = new List<int>();
@@ -204,10 +210,13 @@ namespace DDR_GraphMix
 
             // DSATUR Calculation
             k = CalculateDsatur();
+            Console.WriteLine("\r3/3\u001b[K");  //Clear the right of the line to remove the "..."
+            /*
             for (int i = 0; i < n; i++)
             {
-                //Console.WriteLine("colours of " + i + " : " + color2[i]);
+                Console.WriteLine("colours of " + i + " : " + color2[i]);
             }
+            */
             Console.WriteLine("DSAT Algorithm : Colouring in " + k + " colours.");
 
 

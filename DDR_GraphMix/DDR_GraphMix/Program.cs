@@ -465,7 +465,7 @@ namespace DDR_GraphMix
                     case 3:
                         string file3 = SelectFile();
                         ReadFile(file3);
-                        _ = new Dsatur(graph);
+                        new Dsatur(graph);
                         returnValue = false;
                         break;
                     case 4:
