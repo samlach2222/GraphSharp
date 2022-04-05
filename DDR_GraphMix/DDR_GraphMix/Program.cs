@@ -101,7 +101,7 @@ namespace DDR_GraphMix
 
                 int removeKeysCount = removeKeys.Count;
 
-                using (StreamWriter consoleWriter = new StreamWriter(Console.OpenStandardOutput(), Encoding.UTF8, 1024*10))
+                using (StreamWriter consoleWriter = new StreamWriter(Console.OpenStandardOutput(), Encoding.UTF8, 10240))  //Console.Write slows the program too much, unlike Console.OpenStandardOutput
                 {
                     // Delete keys and delete values in nextnodes values
                     foreach (int key in removeKeys) // for each keys
@@ -116,6 +116,7 @@ namespace DDR_GraphMix
 
                         consoleWriter.Write("\rk : " + k + " --> " + removeKeysCount + " (" + (localGraphInitialSize - localGraph.Count) + "/" + localGraphInitialSize + ")\u001b[K");  //Clear the right of the line, as consoleWriter sometimes causes artifacts
                     }
+
                     //No need to flush consoleWriter, it already does it when exiting the using
                 }
 
