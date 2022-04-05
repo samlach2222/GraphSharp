@@ -173,13 +173,13 @@ namespace DDR_GraphMix
                 }
             }
             
-            n = allValues.Count;
+            n = allValues.Max() + 1;
             adj = new int[n][];
 
             Console.Write("\r1/3...");
-            for (int i = 0; i < allValues.Count; i++)
+            for (int i = 0; i < n; i++)
             {
-                for (int j = 0; j < allValues.Count; j++)
+                for (int j = 0; j < n; j++)
                 {
                     if (adj[i] == null)
                     {

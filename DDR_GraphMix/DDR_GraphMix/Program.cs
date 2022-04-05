@@ -285,9 +285,13 @@ namespace DDR_GraphMix
                         {
                             if (!vertexDegenerationTableMatulaBeck.Contains(w))
                             {
-                                d[w] -= 1;
-                                D[d[w]].Add(w);
-                                movedNeighbors.Add(w);
+                                if(d[w] >= 1)
+                                {
+                                    d[w] -= 1;
+                                    D[d[w]].Add(w);
+                                    movedNeighbors.Add(w);
+                                }
+                                
                             }
                         }
                         foreach (int w in movedNeighbors)
