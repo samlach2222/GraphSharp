@@ -231,7 +231,7 @@ namespace DDR_GraphMix
                 Console.WriteLine("colours of " + i + " : " + color2[i]);
             }
             */
-            Console.WriteLine("DSAT Algorithm : Colouring in " + k + " colours.");
+            Console.WriteLine("DSAT Algorithm : Colouring in " + k + " colours.\n");
 
 
             // ColorExact calculation

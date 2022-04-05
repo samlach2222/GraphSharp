@@ -177,7 +177,7 @@ namespace DDR_GraphMix
 
             Console.WriteLine("---------------------");
             Console.WriteLine("| PDF file creation |");
-            Console.WriteLine("---------------------");
+            Console.WriteLine("---------------------\n");
 
             int maxCircleSize = (int)(document.GetRight(-10) / 2) * 80 /100;
             int minCircleSize = 150;
@@ -396,14 +396,16 @@ namespace DDR_GraphMix
                         Console.WriteLine(i + ". " + "\t" + dataFiles[i - 1] + tabulation + Math.Round((double)fi.Length / 1048576, 1) + " Mo");
                     }
                 }
+                Console.WriteLine();
                 choice = Int32.Parse(Console.ReadLine());
                 if (choice <= 0 || choice > size)
                 {
-                    Console.WriteLine("/!\\ BAD VALUE ! /!\\");
+                    Console.WriteLine("/!\\ BAD VALUE ! /!\\\n");
                     returnValue = true;
                 }
                 else
                 {
+                    Console.WriteLine();
                     returnValue = false;
                 }
             }
@@ -465,24 +467,28 @@ namespace DDR_GraphMix
                 switch (choice)
                 {
                     case 1:
+                        Console.WriteLine();
                         string file1 = SelectFile();
                         ReadFile(file1);
                         DisplayGraph();
                         returnValue = false;
                         break;
                     case 2:
+                        Console.WriteLine();
                         string file2 = SelectFile();
                         ReadFile(file2);
                         VertexDegenerationFilling();
                         returnValue = false;
                         break;
                     case 3:
+                        Console.WriteLine();
                         string file3 = SelectFile();
                         ReadFile(file3);
                         new Dsatur(graph);
                         returnValue = false;
                         break;
                     case 4:
+                        Console.WriteLine();
                         string file4 = SelectFile();
                         ReadFile(file4);
                         VertexDegenerationFilling();
@@ -490,17 +496,19 @@ namespace DDR_GraphMix
                         returnValue = false;
                         break;
                     case 5:
+                        Console.WriteLine();
                         CompareDegenerationAndChromaticNumber();
                         returnValue = false;
                         break;
                     case 6:
+                        Console.WriteLine();
                         string file5 = SelectFile();
                         ReadFile(file5);
                         VertexDegenerationFillingMatulaBeck();
                         returnValue = false;
                         break;
                     default:
-                        Console.WriteLine("/!\\ BAD VALUE ! /!\\");
+                        Console.WriteLine("/!\\ BAD VALUE ! /!\\\n");
                         returnValue = true;
                         break;
                 }
