@@ -171,7 +171,8 @@ namespace DDR_GraphMix
 
             List<int> allValues = new List<int>();
 
-            Console.Write("1/4");
+            int graphCount = graph.Count;
+            Console.WriteLine("1/4");
             foreach (List<int> l in graph.Values)
             {
                 foreach (int v in l)
@@ -181,12 +182,14 @@ namespace DDR_GraphMix
                         allValues.Add(v);
                     }
                 }
+                Program.ShowProgression(allValues.Count, graphCount);
             }
             
             n = allValues.Max() + 1;
             adj = new int[n][];
 
-            Console.WriteLine("\r2/4\u001b[K");  // Clear the right of the line to removes the "..."
+            Program.ClearConsoleLines(2);
+            Console.WriteLine("2/4");  // Clear the right of the line to removes the "..."
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
