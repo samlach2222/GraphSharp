@@ -379,31 +379,55 @@ namespace DDR_GraphMix
         {
             int choice;
             bool returnValue;
+            int size = dataFiles.Count;
+
+            //Order files by size
+            List<(string fileName, long fileSize)> orderedFiles = new List<(string fileName, long fileSize)>();
+            for (int i = 0; i < size; i++)
+            {
+                string fileName = @"Resources\" + dataFiles[i];
+                FileInfo fi = new FileInfo(fileName);
+                long fileSize = fi.Length;
+
+                int index = orderedFiles.Count;
+                for (int j = 0; j < orderedFiles.Count; j++)
+                {
+                    if (fileSize < orderedFiles[j].fileSize)
+                    {
+                        index = j;
+                        break;
+                    }
+                }
+
+                orderedFiles.Insert(index, (dataFiles[i], fileSize));
+            }
+
             do
             {
                 Console.WriteLine("CHOOSE A FILE :\n");
-                int size = dataFiles.Count;
-                for (int i = 1; i <= size; i++)
+                
+                for (int i = 0; i < size; i++)
                 {
-                    string fileName = @"Resources\" + dataFiles[i - 1];
-                    FileInfo fi = new FileInfo(fileName);
-                    double fileSize = fi.Length;
+                    (string fileName, long fileSize) file = orderedFiles[i];
+                    string fileName = @"Resources\" + file.fileName;
+
                     string tabulation = "\t";
-                    if(fileName.Length < 11 + 7) // 11 is for the Resources\\
+                    if (fileName.Length < 11 + 7) // 11 is for the Resources\\
                     {
                         tabulation = "\t\t";
                     }
-                    if(fileSize < 1024)
+
+                    if (file.fileSize < 1024)
                     {
-                        Console.WriteLine(i + ". " + "\t" + dataFiles[i - 1] + tabulation + Math.Round((double)fi.Length, 1) + " o");
+                        Console.WriteLine((i + 1) + ". \t" + file.fileName + tabulation + file.fileSize + "o");
                     }
-                    else if (fileSize < 1048576)
+                    else if (file.fileSize < 1048576)
                     {
-                        Console.WriteLine(i + ". " + "\t" + dataFiles[i - 1] + tabulation + Math.Round((double)fi.Length / 1024, 1) + " Ko");
+                        Console.WriteLine((i + 1) + ". \t" + file.fileName + tabulation + Math.Round((double)file.fileSize / 1024, 1) + "Ko");
                     }
                     else
                     {
-                        Console.WriteLine(i + ". " + "\t" + dataFiles[i - 1] + tabulation + Math.Round((double)fi.Length / 1048576, 1) + " Mo");
+                        Console.WriteLine((i + 1) + ". \t" + file.fileName + tabulation + Math.Round((double)file.fileSize / 1048576, 1) + "Mo");
                     }
                 }
                 Console.WriteLine();
@@ -421,7 +445,7 @@ namespace DDR_GraphMix
             }
             while (returnValue);
 
-            return dataFiles[choice - 1];
+            return orderedFiles[choice - 1].fileName;
         }
 
         static void ReadFile(string file)
