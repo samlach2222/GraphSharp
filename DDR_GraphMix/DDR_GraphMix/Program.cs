@@ -20,7 +20,7 @@ namespace DDR_GraphMix
         static int DegenerationNumber = 0;
         static StreamWriter consoleWriter;
 
-        public static StreamWriter ConsoleWriter { get => consoleWriter; }
+        public static StreamWriter ConsoleWriter => consoleWriter;
 
         static void Main()
         {
@@ -51,8 +51,10 @@ namespace DDR_GraphMix
         {
             if (!graph.ContainsKey(curNode))
             { // if the current node is not in the keys
-                List<int> list = new List<int>();
-                list.Add(nextNode);
+                List<int> list = new List<int>
+                {
+                    nextNode
+                };
                 graph.Add(curNode, list);
             }
             else // if the current node is in the keys
@@ -352,7 +354,7 @@ namespace DDR_GraphMix
                     VertexDegenerationFilling();
                     Dsatur d = new Dsatur(graph);
                     int degenerationNumber = DegenerationNumber;
-                    int chromaticNumber = d.getK();
+                    int chromaticNumber = d.K;
                     List<string> list = new List<string>
                 {
                     file,
@@ -465,7 +467,7 @@ namespace DDR_GraphMix
                     string readLine = streamReader.ReadLine();
                     if (!readLine.StartsWith("%") && readLine != "") // read lines except lines who begin with "%"
                     {
-                        string[] splitedLine = readLine.Split("\t"); // get the two ints of the line
+                        string[] splitedLine = readLine.Split('\t'); // get the two ints of the line
 
                         int curNode = Int32.Parse(splitedLine[0]);
                         int nextNode = Int32.Parse(splitedLine[1]);
@@ -474,11 +476,10 @@ namespace DDR_GraphMix
                         Insert(nextNode, curNode); // insert ints into 
                     }
                 }
-                consoleWriter.Flush();
-                Console.WriteLine();  //Line break
-                Console.WriteLine();  //Line break
             }
-
+            consoleWriter.Flush();
+            Console.WriteLine();  //Line break
+            Console.WriteLine();  //Line break
         }
 
         /// <summary>

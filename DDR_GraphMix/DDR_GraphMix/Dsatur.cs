@@ -15,7 +15,9 @@ namespace DDR_GraphMix
         private readonly int n; // Number of vertices
         private readonly int[][] adj; //[n][n];  // Graph adjacency matrix
         private bool finded = false; // Allows to stop the exact algorithm when a colouring has been found
-        private int k; // k-degeneration
+        private readonly int k; // k-degeneration
+
+        public int K => k;
 
         private int CalculateDsatur()
         {
@@ -165,7 +167,7 @@ namespace DDR_GraphMix
             Console.WriteLine("| Calculating chromatic number |");
             Console.WriteLine("--------------------------------");
 
-            int nbc;
+            //int nbc;
 
             // Filling of adj
 
@@ -237,10 +239,6 @@ namespace DDR_GraphMix
             // ColorExact calculation
             //nbc = ChromaticNumber(k);
             //Console.WriteLine("Chromatic number : " + nbc);
-        }
-        public int getK()
-        {
-            return this.k;
         }
         
     }
