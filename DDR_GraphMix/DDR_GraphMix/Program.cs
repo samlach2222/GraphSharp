@@ -19,6 +19,8 @@ namespace DDR_GraphMix
         static int DegenerationNumber = 0;
         static StreamWriter consoleWriter;
 
+        public static StreamWriter ConsoleWriter { get => consoleWriter; }
+
         static void Main()
         {
             consoleWriter = new StreamWriter(Console.OpenStandardOutput(), Encoding.UTF8, 10240);
@@ -100,7 +102,7 @@ namespace DDR_GraphMix
 
             while (localGraph.Count != 0)
             {
-                AfficherProgression(localGraphInitialSize - localGraph.Count, localGraphInitialSize);
+                ShowProgression(localGraphInitialSize - localGraph.Count, localGraphInitialSize);
 
                 // filling a list with all key we have to delete
                 List<int> removeKeys = new List<int>();
@@ -126,7 +128,7 @@ namespace DDR_GraphMix
                     }
                     vertexDegenerationTable.Add(key, k);
 
-                    AfficherProgression(localGraphInitialSize - localGraph.Count, localGraphInitialSize);
+                    ShowProgression(localGraphInitialSize - localGraph.Count, localGraphInitialSize);
                 }
 
                 if (removeKeys.Count == 0)
@@ -285,13 +287,9 @@ namespace DDR_GraphMix
                         {
                             if (!vertexDegenerationTableMatulaBeck.Contains(w))
                             {
-                                if(d[w] >= 1)
-                                {
-                                    d[w] -= 1;
-                                    D[d[w]].Add(w);
-                                    movedNeighbors.Add(w);
-                                }
-                                
+                                d[w] -= 1;
+                                D[d[w]].Add(w);
+                                movedNeighbors.Add(w);
                             }
                         }
                         foreach (int w in movedNeighbors)
@@ -427,7 +425,7 @@ namespace DDR_GraphMix
                 long fileLength = streamReader.BaseStream.Length;
                 while (!streamReader.EndOfStream)
                 {
-                    AfficherProgression(streamReader.BaseStream.Position, fileLength);
+                    ShowProgression(streamReader.BaseStream.Position, fileLength);
                     string readLine = streamReader.ReadLine();
                     if (!readLine.StartsWith("%") && readLine != "") // read lines except lines who begin with "%"
                     {
@@ -510,7 +508,7 @@ namespace DDR_GraphMix
             while (returnValue);
         }
 
-        static void AfficherProgression(int value, int max)
+        public static void ShowProgression(int value, int max)
         {
             int pourcentage = value * 100 / max;
             string barre = "";
@@ -528,7 +526,7 @@ namespace DDR_GraphMix
             consoleWriter.Write("\r[" + barre + "] " + pourcentage + '%');
         }
 
-        static void AfficherProgression(long value, long max)
+        public static void ShowProgression(long value, long max)
         {
             long pourcentage = value * 100 / max;
             string barre = "";
@@ -544,6 +542,20 @@ namespace DDR_GraphMix
                 }
             }
             consoleWriter.Write("\r[" + barre + "] " + pourcentage + '%');
+        }
+
+        public static void ClearConsoleLines(int lines)
+        {
+            consoleWriter.Flush();
+            for (int i = 0; i < lines; i++)
+            {
+                Console.CursorLeft = 0;
+                Console.Write("\u001b[K");  //Clear the right of the line)
+                if (i + 1 != lines)
+                {
+                    Console.CursorTop -= 1;
+                }
+            }
         }
     }
 }

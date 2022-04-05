@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -19,6 +20,9 @@ namespace DDR_GraphMix
         private int CalculateDsatur()
         {
             int nb = 0, c, x, cmax = 0;
+
+            Program.ClearConsoleLines(2);
+            Console.WriteLine("3/4");
             for (int i = 0; i < n; i++)
             {
                 color2.Add(0);
@@ -33,8 +37,11 @@ namespace DDR_GraphMix
                     
                 } 
                 DSAT[i] = Degree[i];
+                Program.ShowProgression(i + 1, n);
             }
 
+            Program.ClearConsoleLines(2);
+            Console.WriteLine("4/4");
             while (nb < n)  // As long as we have not coloured all the vertices
             {
                 c = 1;
@@ -56,6 +63,8 @@ namespace DDR_GraphMix
                     cmax = c;
                 }
                 nb++;
+
+                Program.ShowProgression(nb, n);
             }
             return cmax;
         }
@@ -162,6 +171,7 @@ namespace DDR_GraphMix
 
             List<int> allValues = new List<int>();
 
+            Console.Write("1/4");
             foreach (List<int> l in graph.Values)
             {
                 foreach (int v in l)
@@ -176,7 +186,7 @@ namespace DDR_GraphMix
             n = allValues.Max() + 1;
             adj = new int[n][];
 
-            Console.Write("\r1/3...");
+            Console.WriteLine("\r2/4\u001b[K");  // Clear the right of the line to removes the "..."
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
@@ -200,8 +210,8 @@ namespace DDR_GraphMix
                         adj[i][j] = 0;
                     }
                 }
+                Program.ShowProgression(i+1, n);
             }
-            Console.Write("\r2/3...");
 
             color1 = new List<int>(); 
             color2 = new List<int>();
@@ -209,8 +219,9 @@ namespace DDR_GraphMix
             Degree = new List<int>();
 
             // DSATUR Calculation
-            k = CalculateDsatur();
-            Console.WriteLine("\r3/3\u001b[K");  //Clear the right of the line to remove the "..."
+            k = CalculateDsatur();  // The steps 3 and 4 are in the method CalculateDsatur
+            Program.ConsoleWriter.Flush();
+            Console.WriteLine();
             /*
             for (int i = 0; i < n; i++)
             {
