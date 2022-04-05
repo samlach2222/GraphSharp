@@ -133,9 +133,9 @@ namespace DDR_GraphMix
         /// <summary>
         /// This function is used to create a graph named "export.pdf" with circles for k-degenerations numbers for the current graph
         /// </summary>
-        static void CreatePDF()
+        static void CreatePDF(string filename)
         {
-            string pdfFile = @"Resources\export.pdf";
+            string pdfFile = @"Resources\"+filename+".pdf";
 
             Document document = new Document(PageSize.A0, 10, 10, 10, 10);
             FileStream fs = new FileStream(pdfFile, FileMode.Create, FileAccess.Write);
@@ -472,7 +472,7 @@ namespace DDR_GraphMix
                         string file4 = SelectFile();
                         ReadFile(file4);
                         VertexDegenerationFilling();
-                        CreatePDF();
+                        CreatePDF(file4);
                         returnValue = false;
                         break;
                     case 5:
