@@ -17,11 +17,26 @@ namespace DDR_GraphMix
         static List<int> vertexDegenerationTableMatulaBeck;
         static readonly List<string> dataFiles = new List<string>();
         static int DegenerationNumber = 0;
+        static StreamWriter consoleWriter;
 
         static void Main()
         {
-            FillingDataSets();
-            SelectMenu();
+            consoleWriter = new StreamWriter(Console.OpenStandardOutput(), Encoding.UTF8, 10240);
+            Console.CancelKeyPress += delegate {
+                // Ensures consoleWriter is always closed when closing the program with Ctrl+C or Ctrl+Break
+                consoleWriter.Dispose();
+            };
+
+            try
+            {
+                FillingDataSets();
+                SelectMenu();
+            }
+            finally
+            {
+                // Ensures consoleWriter is always closed whether an exception occurs or not
+                consoleWriter.Dispose();
+            }
         }
 
         /// <summary>
@@ -85,7 +100,7 @@ namespace DDR_GraphMix
 
             while (localGraph.Count != 0)
             {
-               Console.Write("\rk : " + k + " --> 0 (" + (localGraphInitialSize - localGraph.Count) + "/" + localGraphInitialSize + ")" + "\u001b[K");  //Clear the right of the line
+                AfficherProgression(localGraphInitialSize - localGraph.Count, localGraphInitialSize);
 
                 // filling a list with all key we have to delete
                 List<int> removeKeys = new List<int>();
@@ -95,29 +110,23 @@ namespace DDR_GraphMix
                     if (list.Count <= k)
                     {
                         removeKeys.Add(key);
-                        Console.Write("\rk : " + k + " --> " + removeKeys.Count + " (" + (localGraphInitialSize - localGraph.Count) + "/" + localGraphInitialSize + ")");
                     }
                 }
 
                 int removeKeysCount = removeKeys.Count;
 
-                using (StreamWriter consoleWriter = new StreamWriter(Console.OpenStandardOutput(), Encoding.UTF8, 10240))  //Console.Write slows the program too much, unlike Console.OpenStandardOutput
+                // Delete keys and delete values in nextnodes values
+                foreach (int key in removeKeys) // for each keys
                 {
-                    // Delete keys and delete values in nextnodes values
-                    foreach (int key in removeKeys) // for each keys
+                    localGraph.Remove(key);
+                    foreach (int row in localGraph.Keys)
                     {
-                        localGraph.Remove(key);
-                        foreach (int row in localGraph.Keys)
-                        {
-                            List<int> list = localGraph[row]; // get all nextNode of the key
-                            list.Remove(key);
-                        }
-                        vertexDegenerationTable.Add(key, k);
-
-                        consoleWriter.Write("\rk : " + k + " --> " + removeKeysCount + " (" + (localGraphInitialSize - localGraph.Count) + "/" + localGraphInitialSize + ")\u001b[K");  //Clear the right of the line, as consoleWriter sometimes causes artifacts
+                        List<int> list = localGraph[row]; // get all nextNode of the key
+                        list.Remove(key);
                     }
+                    vertexDegenerationTable.Add(key, k);
 
-                    //No need to flush consoleWriter, it already does it when exiting the using
+                    AfficherProgression(localGraphInitialSize - localGraph.Count, localGraphInitialSize);
                 }
 
                 if (removeKeys.Count == 0)
@@ -125,6 +134,7 @@ namespace DDR_GraphMix
                     k++;
                 }
             }
+            consoleWriter.Flush();
 
             Console.WriteLine("\nThe degeneration number is : " + k + "\n");
             DegenerationNumber = k;
@@ -426,9 +436,11 @@ namespace DDR_GraphMix
                         Insert(nextNode, curNode); // insert ints into 
                     }
                 }
+                consoleWriter.Flush();
                 Console.WriteLine();  //Line break
                 Console.WriteLine();  //Line break
             }
+
         }
 
         /// <summary>
@@ -497,18 +509,19 @@ namespace DDR_GraphMix
         static void AfficherProgression(int value, int max)
         {
             int pourcentage = value * 100 / max;
-            Console.Write("\r[");
+            string barre = "";
             for (int i = 0; i < 10; i++)
             {
                 if (pourcentage / 10 > i)
                 {
-                    Console.Write('*');
-                } else
+                    barre += '*';
+                }
+                else
                 {
-                    Console.Write(' ');
+                    barre += ' ';
                 }
             }
-            Console.Write("] " + pourcentage + '%');
+            consoleWriter.Write("\r[" + barre + "] " + pourcentage + '%');
         }
 
         static void AfficherProgression(long value, long max)
@@ -526,7 +539,7 @@ namespace DDR_GraphMix
                     barre += ' ';
                 }
             }
-            Console.Write("\r[" + barre + "] " + pourcentage + '%');
+            consoleWriter.Write("\r[" + barre + "] " + pourcentage + '%');
         }
     }
 }
