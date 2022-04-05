@@ -413,7 +413,7 @@ namespace DDR_GraphMix
                 long fileLength = streamReader.BaseStream.Length;
                 while (!streamReader.EndOfStream)
                 {
-                    Console.Write("\r" + streamReader.BaseStream.Position + "/" + fileLength);
+                    AfficherProgression(streamReader.BaseStream.Position, fileLength);
                     string readLine = streamReader.ReadLine();
                     if (!readLine.StartsWith("%") && readLine != "") // read lines except lines who begin with "%"
                     {
@@ -492,6 +492,41 @@ namespace DDR_GraphMix
                 }
             }
             while (returnValue);
+        }
+
+        static void AfficherProgression(int value, int max)
+        {
+            int pourcentage = value * 100 / max;
+            Console.Write("\r[");
+            for (int i = 0; i < 10; i++)
+            {
+                if (pourcentage / 10 > i)
+                {
+                    Console.Write('*');
+                } else
+                {
+                    Console.Write(' ');
+                }
+            }
+            Console.Write("] " + pourcentage + '%');
+        }
+
+        static void AfficherProgression(long value, long max)
+        {
+            long pourcentage = value * 100 / max;
+            string barre = "";
+            for (int i = 0; i < 10; i++)
+            {
+                if (pourcentage / 10 > i)
+                {
+                    barre += '*';
+                }
+                else
+                {
+                    barre += ' ';
+                }
+            }
+            Console.Write("\r[" + barre + "] " + pourcentage + '%');
         }
     }
 }
