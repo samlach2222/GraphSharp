@@ -189,7 +189,7 @@ namespace DDR_GraphMix
             adj = new int[n][];
 
             Program.ClearConsoleLines(2);
-            Console.WriteLine("2/4");  // Clear the right of the line to removes the "..."
+            Console.WriteLine("2/4");
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
