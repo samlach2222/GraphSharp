@@ -7,6 +7,7 @@ using System.Linq;
 using Document = iTextSharp.text.Document;
 using static DDR_GraphMix.Dsatur;
 using System.Text;
+using System.Diagnostics;
 
 namespace DDR_GraphMix
 {
@@ -226,6 +227,15 @@ namespace DDR_GraphMix
             document.Close();
             fs.Close();
             writer.Close();
+
+            //Open the generated pdf
+            new Process
+            {
+                StartInfo = new ProcessStartInfo(pdfFile)
+                {
+                    UseShellExecute = true
+                }
+            }.Start();
         }
 
         /// <summary>
