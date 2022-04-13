@@ -93,8 +93,6 @@ namespace DDR_GraphMix
             Console.WriteLine("| Calculating degeneration number and filling the table |");
             Console.WriteLine("---------------------------------------------------------");
 
-            Console.WriteLine(" /!\\ Beware that this operation can take a long time /!\\");
-
             vertexDegenerationTable = new Dictionary<int, int>();
 
             // copy graph
