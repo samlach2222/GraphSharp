@@ -5,12 +5,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Document = iTextSharp.text.Document;
-using static DDR_GraphMix.Dsatur;
 using System.Text;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
 
-namespace DDR_GraphMix
+namespace GraphSharp
 {
     class Program
     {

@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace DDR_GraphMix
+namespace GraphSharp
 {
     public class Dsatur
     {
