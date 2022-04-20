@@ -45,8 +45,8 @@ namespace DDR_GraphMix
         /// <summary>
         /// This function is used to insert values into the value dictionary 
         /// </summary>
-        /// <param name="curNode"></param>
-        /// <param name="nextNode"></param>
+        /// <param name="curNode">The node</param>
+        /// <param name="nextNode">The node's neighbour</param>
         static void Insert(int curNode, int nextNode)
         {
             if (!graph.ContainsKey(curNode))
@@ -144,7 +144,7 @@ namespace DDR_GraphMix
         }
 
         /// <summary>
-        /// This function is used to create a graph named "export.pdf" with circles for k-degenerations numbers for the current graph
+        /// This function is used to create a graph with circles for k-degenerations numbers for the current graph
         /// </summary>
         static void CreatePDF(string filename)
         {
@@ -351,7 +351,7 @@ namespace DDR_GraphMix
         }
 
         /// <summary>
-        /// This function is a list with all files we want to use
+        /// This function fills the variable dataFiles with all the files we can use
         /// </summary>
         static void FillingDataSets()
         {
@@ -369,6 +369,9 @@ namespace DDR_GraphMix
             dataFiles.Add("Youtube");
         }
 
+        /// <summary>
+        /// Calculate degeneration and chromatic numbers of all the files (except Flickr) and compare them at the end
+        /// </summary>
         static void CompareDegenerationAndChromaticNumber()
         {
             List<List<string>> comparaison = new List<List<string>>();
@@ -407,7 +410,7 @@ namespace DDR_GraphMix
         /// <summary>
         /// The function is to ask the user what file he want to use
         /// </summary>
-        /// <returns>string filename</returns>
+        /// <returns>The name of the selected file</returns>
         static string SelectFile()
         {
             int choice;
@@ -481,6 +484,10 @@ namespace DDR_GraphMix
             return orderedFiles[choice - 1].fileName;
         }
 
+        /// <summary>
+        /// Read a file to fills the variable graph
+        /// </summary>
+        /// <param name="file">Name of the file used</param>
         static void ReadFile(string file)
         {
             graph = new Dictionary<int, List<int>>();
@@ -582,6 +589,11 @@ namespace DDR_GraphMix
             while (returnValue);
         }
 
+        /// <summary>
+        /// Show the progression using a bar progressively filled with asterisks
+        /// </summary>
+        /// <param name="value">Value to calculate a percentage of progression</param>
+        /// <param name="max">Maximum value of value to calculate a percentage of progression</param>
         public static void ShowProgression(int value, int max)
         {
             int pourcentage = value * 100 / max;
@@ -600,6 +612,11 @@ namespace DDR_GraphMix
             consoleWriter.Write("\r[" + barre + "] " + pourcentage + '%');
         }
 
+        /// <summary>
+        /// Show the progression using a bar progressively filled with asterisks
+        /// </summary>
+        /// <param name="value">Value to calculate a percentage of progression</param>
+        /// <param name="max">Maximum value of value to calculate a percentage of progression</param>
         public static void ShowProgression(long value, long max)
         {
             long pourcentage = value * 100 / max;
@@ -618,13 +635,17 @@ namespace DDR_GraphMix
             consoleWriter.Write("\r[" + barre + "] " + pourcentage + '%');
         }
 
+        /// <summary>
+        /// Flush consoleWriter and clear a specified number of lines in the console
+        /// </summary>
+        /// <param name="lines">Number of lines to clear</param>
         public static void ClearConsoleLines(int lines)
         {
             consoleWriter.Flush();
             for (int i = 0; i < lines; i++)
             {
                 Console.CursorLeft = 0;
-                Console.Write("\u001b[K");  //Clear the right of the line)
+                Console.Write("\u001b[K");  //Clear the right of the line
                 if (i + 1 != lines)
                 {
                     Console.CursorTop -= 1;
