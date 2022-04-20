@@ -15,7 +15,7 @@ namespace DDR_GraphMix
     {
         static Dictionary<int, List<int>> graph = new Dictionary<int, List<int>>();
         static Dictionary<int, int> vertexDegenerationTable;
-        static List<int> vertexDegenerationTableMatulaBeck;
+        static Dictionary<int, List<int>> vertexDegenerationTableMatulaBeck;
         static readonly List<string> dataFiles = new List<string>();
         static int DegenerationNumber = 0;
         static StreamWriter consoleWriter;
@@ -239,12 +239,16 @@ namespace DDR_GraphMix
         }
 
         /// <summary>
-        /// The function is used to calculate and display the degeneration number of the current graph with Matula & Beck algorithm
+        /// The function is used to calculate and display the degeneration number of the current graph with the Matula & Beck algorithm
         /// </summary>
         static void VertexDegenerationFillingMatulaBeck()
         {
+            Console.WriteLine("---------------------------------------------------------");
+            Console.WriteLine("| Calculating degeneration number and filling the table |");
+            Console.WriteLine("---------------------------------------------------------");
+
             //Initialize an output list L
-            vertexDegenerationTableMatulaBeck = new List<int>();
+            vertexDegenerationTableMatulaBeck = new Dictionary<int, List<int>>();
 
             //Compute a number dv for each vertex v in G, the number of neighbors of v that are not already in L. Initially, these numbers are just the degrees of the vertices
             Dictionary<int, int> d = graph.ToDictionary(entry => entry.Key, entry => entry.Value.Count);
@@ -253,68 +257,96 @@ namespace DDR_GraphMix
 
             //Initialize an array D such that D[i] contains a list of the vertices v that are not already in L for which dv = i
             List<int>[] D = new List<int>[BiggestI + 1];
-            for (int i = 0; i <= BiggestI; i++)
+            for (int j = 0; j <= BiggestI; j++)
             {
                 List<int> DiList = new List<int>();
                 foreach (int key in d.Keys)
                 {
-                    if (d[key] == i)
+                    if (d[key] == j)
                     {
                         DiList.Add(key);
                     }
                 }
 
-                D[i] = DiList;
+                D[j] = DiList;
             }
 
             //Initialize k to 0
             int k = 0;
 
+            int i = 0;
             bool DContainsValues = true;
+            int DInitialNumberOfElements = 0;
+            foreach (List<int> DList in D)
+            {
+                DInitialNumberOfElements += DList.Count;
+            }
+
+            int DNumberOfRemovedElements = 0;
 
             //Repeat n times
             while (DContainsValues)
             {
-                //Scan the array cells D[0], D[1],... until finding an i for which D[i] is nonempty
+                ShowProgression(DNumberOfRemovedElements, DInitialNumberOfElements);
+
                 DContainsValues = false;
-                for (int i = 0; i < BiggestI; i++)
+                //Search for the lowest non-empty bucket
+                if (D[i].Count == 0)
                 {
-                    if (D[i].Any())  //If the list contains elements
+                    for (int j = i; j < D.Length; j++)
                     {
-                        DContainsValues = true;
-
-                        //Set k to max(k,i)
-                        k = Math.Max(k, i);
-
-                        //Select a vertex v from D[i]. Add v to the beginning of L and remove it from D[i].
-                        int v = D[i][0];
-                        vertexDegenerationTableMatulaBeck.Insert(0, v);
-                        D[i].Remove(v);
-
-                        //For each neighbor w of v not already in L, subtract one from dw and move w to the cell of D corresponding to the new value of dw
-                        List<int> movedNeighbors = new List<int>();
-                        foreach (int w in graph[v])
+                        if (D[j].Count > 0)
                         {
-                            if (!vertexDegenerationTableMatulaBeck.Contains(w))
-                            {
-                                d[w] -= 1;
-                                D[d[w]].Add(w);
-                                movedNeighbors.Add(w);
-                            }
+                            i = j;
+                            DContainsValues = true;
+                            break;
                         }
-                        foreach (int w in movedNeighbors)
+                    }
+                }
+                else
+                {
+                    DContainsValues = true;
+                }
+
+                k = Math.Max(k, i);
+
+                if (DContainsValues)
+                {
+                    //Remove the first vertex in the lowest non-empty bucket
+                    int v = D[i][0];
+                    D[i].Remove(v);
+                    DNumberOfRemovedElements++;
+                    if (vertexDegenerationTableMatulaBeck.ContainsKey(k))
+                    {
+                        vertexDegenerationTableMatulaBeck[k].Add(v);
+
+                    }
+                    else
+                    {
+                        vertexDegenerationTableMatulaBeck.Add(k, new List<int> { v });
+                    }
+
+                    d[v] = -1;
+
+                    //Update the neighbors of the removed vertex, after checking if they were not removed
+                    foreach (int u in graph[v])
+                    {
+                        if (d[u] != -1)
                         {
-                            D[i].Remove(w);
+                            if (i == d[u])
+                            {
+                                i--;
+                            }
+                            D[d[u]].Remove(u);
+                            d[u] -= 1;
+                            D[d[u]].Add(u);
                         }
                     }
                 }
             }
+            consoleWriter.Flush();
 
-            Console.WriteLine("L :");
-            foreach (int vertex in vertexDegenerationTableMatulaBeck)
-            {
-                Console.WriteLine("    "+vertex);
-            }
+            Console.WriteLine("\nThe degeneration number is : "+k+"\n");
         }
 
         /// <summary>
@@ -494,7 +526,7 @@ namespace DDR_GraphMix
                 Console.WriteLine("3. Calculate chromatic number\n");
                 Console.WriteLine("4. Generate a PDF with vertex degeneration\n");
                 Console.WriteLine("5. Compare degeneration and chromatic numbers for a lots of graphs\n");
-                Console.WriteLine("6. Calculate degeneration number with Matula Beck Algorithm\n");
+                Console.WriteLine("6. Calculate degeneration number with the Matula & Beck algorithm\n");
                 int choice = Int32.Parse(Console.ReadLine());
 
                 switch (choice)
