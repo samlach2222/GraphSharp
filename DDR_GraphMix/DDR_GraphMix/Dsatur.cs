@@ -9,12 +9,10 @@ namespace DDR_GraphMix
     public class Dsatur
     {
         private readonly List<int> DSAT; // Degrees of saturation
-        private readonly List<int> color1; // Vertex colours for the exact agorithm
-        private readonly List<int> color2; // Colours for Dsatur
+        private readonly List<int> color; // Colours for Dsatur
         private readonly List<int> Degree; // Degrees of the vertices
         private readonly int n; // Number of vertices
         private readonly int[][] adj; //[n][n];  // Graph adjacency matrix
-        private bool finded = false; // Allows to stop the exact algorithm when a colouring has been found
         private readonly int k; // k-degeneration
 
         public int K => k;
@@ -27,7 +25,7 @@ namespace DDR_GraphMix
             Console.WriteLine("3/4");
             for (int i = 0; i < n; i++)
             {
-                color2.Add(0);
+                color.Add(0);
                 DSAT.Add(0); 
                 Degree.Add(0);
                 for (int j = 0; j < n; j++)
@@ -59,7 +57,7 @@ namespace DDR_GraphMix
                         DSAT[j]++;
                     }
                 }
-                color2[x] = c;
+                color[x] = c;
                 if (cmax < c)
                 {
                     cmax = c;
@@ -78,7 +76,7 @@ namespace DDR_GraphMix
             int smax = 0;
             for (int i = 0; i < n; i++)
             {
-                if (color2[i] == 0 && (DSAT[i] > maxDSAT || (DSAT[i] == maxDSAT && Degree[i] > maxDeg)))
+                if (color[i] == 0 && (DSAT[i] > maxDSAT || (DSAT[i] == maxDSAT && Degree[i] > maxDeg)))
                 {
                     maxDSAT = DSAT[i];
                     maxDeg = Degree[i]; smax = i;
@@ -91,75 +89,13 @@ namespace DDR_GraphMix
         {
             for (int i = 0; i < n; i++) 
             {
-                if (adj[x][i] == 1 && (color2[i] == c))
+                if (adj[x][i] == 1 && (color[i] == c))
                 {
                     return false;
                 }
             }
             return true;
         }
-
-        int ChromaticNumber(int d) // Calculates the chromatic number by testing from d colours and decreasing k as far as possible
-        {
-            int k = d + 1;
-            do
-            {
-                k--;
-                finded = false;
-                Colorexact(k);
-            }
-            while (finded);
-            return k + 1;
-        }
-
-        void Colorexact(int k) // Test if the graph has a k-colouring by trying all combinations
-        {
-            for (int i = 0; i < n; i++)
-            {
-                color1.Add(0);
-            }
-            ColorRR(0, k);
-        }
-
-        void ColorRR(int x, int k) // Recursive function to test all possible colours for vertex x
-        {
-            if (x == n)
-            {
-                Console.WriteLine("\nColorExact Algorithm : Colouring in " + k + " colours finded");
-                for (int i = 0; i < n; i++)
-                {
-                    Console.WriteLine("Colours of " + i + " : " + color1[i]);
-                }
-                finded = true;
-            }
-            else
-                for (int c = 1; c <= k; c++)
-                {
-                    if (Suitable(x, c))
-                    {
-                        color1[x] = c;
-                        ColorRR(x + 1, k);
-                        if (finded)
-                        {
-                            return;
-                        }
-                        
-                    }
-                }   
-        }
-
-        bool Suitable(int x, int c) // Test if the colour c can be given to vertex x (it is not used by one of its neighbours)
-        {
-            for (int i = 0; i < x; i++) 
-            {
-                if (adj[x][i] == 1 && (color1[i] == c))
-                {
-                    return false;
-                }
-            } 
-            return true;
-        }
-
 
         public Dsatur(Dictionary<int, List<int>> graph)
         {
@@ -218,8 +154,7 @@ namespace DDR_GraphMix
                 Program.ShowProgression(i+1, n);
             }
 
-            color1 = new List<int>(); 
-            color2 = new List<int>();
+            color = new List<int>();
             DSAT = new List<int>();
             Degree = new List<int>();
 
@@ -227,18 +162,7 @@ namespace DDR_GraphMix
             k = CalculateDsatur();  // The steps 3 and 4 are in the method CalculateDsatur
             Program.ConsoleWriter.Flush();
             Console.WriteLine();
-            /*
-            for (int i = 0; i < n; i++)
-            {
-                Console.WriteLine("colours of " + i + " : " + color2[i]);
-            }
-            */
             Console.WriteLine("DSAT Algorithm : Colouring in " + k + " colours.\n");
-
-
-            // ColorExact calculation
-            //nbc = ChromaticNumber(k);
-            //Console.WriteLine("Chromatic number : " + nbc);
         }
         
     }
