@@ -254,17 +254,22 @@ namespace DDR_GraphMix
             Dictionary<int, int> d = graph.ToDictionary(entry => entry.Key, entry => entry.Value.Count);
 
             int BiggestI = d.Values.Max();
+            int DInitialNumberOfElements = 0;
 
+            Console.WriteLine("1/2");
             //Initialize an array D such that D[i] contains a list of the vertices v that are not already in L for which dv = i
             List<int>[] D = new List<int>[BiggestI + 1];
             for (int j = 0; j <= BiggestI; j++)
             {
+                ShowProgression(j, BiggestI);
+
                 List<int> DiList = new List<int>();
                 foreach (int key in d.Keys)
                 {
                     if (d[key] == j)
                     {
                         DiList.Add(key);
+                        DInitialNumberOfElements++;
                     }
                 }
 
@@ -276,14 +281,10 @@ namespace DDR_GraphMix
 
             int i = 0;
             bool DContainsValues = true;
-            int DInitialNumberOfElements = 0;
-            foreach (List<int> DList in D)
-            {
-                DInitialNumberOfElements += DList.Count;
-            }
-
             int DNumberOfRemovedElements = 0;
 
+            ClearConsoleLines(2);
+            Console.WriteLine("2/2");
             //Repeat n times
             while (DContainsValues)
             {
