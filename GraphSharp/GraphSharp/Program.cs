@@ -22,12 +22,9 @@ namespace GraphSharp
             "Exemple",
             "Facebook",
             "Flickr",
-            "GooglePlus",
             "JazzMusicians",
-            "Physicians",
             "PoliticalBooks",
             "SisterCities",
-            "Twitter",
             "Youtube"
         });
 
