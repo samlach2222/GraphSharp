@@ -103,7 +103,7 @@ namespace DDR_GraphMix
         /// </summary>
         static void VertexDegenerationFilling()
         {
-            var watch = new System.Diagnostics.Stopwatch();
+            Stopwatch watch = new Stopwatch();
 
             watch.Start();
 
@@ -162,7 +162,8 @@ namespace DDR_GraphMix
 
             watch.Stop();
 
-            Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms\n");
+            ShowExecutionTime(watch.ElapsedMilliseconds);
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -265,7 +266,7 @@ namespace DDR_GraphMix
         /// </summary>
         static void VertexDegenerationFillingMatulaBeck()
         {
-            var watch = new System.Diagnostics.Stopwatch();
+            Stopwatch watch = new Stopwatch();
 
             watch.Start();
 
@@ -377,7 +378,8 @@ namespace DDR_GraphMix
 
             watch.Stop();
 
-            Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms\n");
+            ShowExecutionTime(watch.ElapsedMilliseconds);
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -644,6 +646,35 @@ namespace DDR_GraphMix
                 }
             }
             consoleWriter.Write("\r[" + barre + "] " + pourcentage + '%');
+        }
+
+        /// <summary>
+        /// Show the execution time using milliseconds passed in parameter
+        /// </summary>
+        /// <param name="ms">milliseconds of running time</param>
+        public static void ShowExecutionTime(long ms)
+        {
+            long seconds = ms / 1000;
+            long minutes = seconds / 60;
+            long hours = minutes / 60;
+
+            Console.Write("Execution Time: ");
+            if (hours > 0)
+            {
+                Console.Write(hours + "h" + minutes % 60 + "min" + seconds % 60 + "s" + ms % 1000 + "ms\n");
+            }
+            else if (minutes > 0)
+            {
+                Console.Write(minutes + "min" + seconds % 60 + "s" + ms % 1000 + "ms\n");
+            }
+            else if (seconds > 0)
+            {
+                Console.Write(seconds + "s" + ms % 1000 + "ms\n");
+            }
+            else
+            {
+                Console.Write(ms + "ms\n");
+            }
         }
 
         /// <summary>
