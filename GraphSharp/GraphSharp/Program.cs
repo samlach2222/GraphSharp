@@ -275,9 +275,17 @@ namespace GraphSharp
             vertexDegenerationTableMatulaBeck = new Dictionary<int, List<int>>();
 
             //Compute a number dv for each vertex v in G, the number of neighbors of v that are not already in L. Initially, these numbers are just the degrees of the vertices
-            Dictionary<int, int> d = graph.ToDictionary(entry => entry.Key, entry => entry.Value.Count);
+            int[] d = new int[graph.Keys.Max() + 1];
+            for (int j = 0; j < d.Length; j++)
+            {
+                d[j] = -1;
+                if (graph.ContainsKey(j))
+                {
+                    d[j] = graph[j].Count;
+                }
+            }
 
-            int BiggestI = d.Values.Max();
+            int BiggestI = d.Max();
             int DInitialNumberOfElements = 0;
 
             Console.WriteLine("1/2");
@@ -287,17 +295,17 @@ namespace GraphSharp
             {
                 ShowProgression(j, BiggestI);
 
-                List<int> DiList = new List<int>();
-                foreach (int key in d.Keys)
+                List<int> DjList = new List<int>();
+                for (int key = 0; key < d.Length; key++)
                 {
                     if (d[key] == j)
                     {
-                        DiList.Add(key);
+                        DjList.Add(key);
                         DInitialNumberOfElements++;
                     }
                 }
 
-                D[j] = DiList;
+                D[j] = DjList;
             }
 
             //Initialize k to 0
