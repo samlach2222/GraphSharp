@@ -8,6 +8,7 @@ using Document = iTextSharp.text.Document;
 using static DDR_GraphMix.Dsatur;
 using System.Text;
 using System.Diagnostics;
+using System.Collections.ObjectModel;
 
 namespace DDR_GraphMix
 {
@@ -16,7 +17,21 @@ namespace DDR_GraphMix
         static Dictionary<int, List<int>> graph = new Dictionary<int, List<int>>();
         static Dictionary<int, int> vertexDegenerationTable;
         static Dictionary<int, List<int>> vertexDegenerationTableMatulaBeck;
-        static readonly List<string> dataFiles = new List<string>();
+        static readonly ReadOnlyCollection<string> dataFiles = new ReadOnlyCollection<string>(new string[] {
+            "Crime",
+            "ERoadNetworks",
+            "Exemple",
+            "Facebook",
+            "Flickr",
+            "GooglePlus",
+            "JazzMusicians",
+            "Physicians",
+            "PoliticalBooks",
+            "SisterCities",
+            "Twitter",
+            "Youtube"
+        });
+
         static int DegenerationNumber = 0;
         static StreamWriter consoleWriter;
 
@@ -32,7 +47,6 @@ namespace DDR_GraphMix
 
             try
             {
-                FillingDataSets();
                 SelectMenu();
             }
             finally
@@ -348,25 +362,6 @@ namespace DDR_GraphMix
             consoleWriter.Flush();
 
             Console.WriteLine("\nThe degeneration number is : "+k+"\n");
-        }
-
-        /// <summary>
-        /// This function fills the variable dataFiles with all the files we can use
-        /// </summary>
-        static void FillingDataSets()
-        {
-            dataFiles.Add("Crime");
-            dataFiles.Add("ERoadNetworks");
-            dataFiles.Add("Exemple");
-            dataFiles.Add("Facebook");
-            dataFiles.Add("Flickr");
-            dataFiles.Add("GooglePlus");
-            dataFiles.Add("JazzMusicians");
-            dataFiles.Add("Physicians");
-            dataFiles.Add("PoliticalBooks");
-            dataFiles.Add("SisterCities");
-            dataFiles.Add("Twitter");
-            dataFiles.Add("Youtube");
         }
 
         /// <summary>
