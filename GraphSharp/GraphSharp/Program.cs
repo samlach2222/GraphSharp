@@ -2,12 +2,12 @@
 using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Document = iTextSharp.text.Document;
 using System.Text;
-using System.Diagnostics;
-using System.Collections.ObjectModel;
+using Document = iTextSharp.text.Document;
 
 namespace GraphSharp
 {
@@ -36,7 +36,8 @@ namespace GraphSharp
         static void Main()
         {
             consoleWriter = new StreamWriter(Console.OpenStandardOutput(), Encoding.UTF8, 10240);
-            Console.CancelKeyPress += delegate {
+            Console.CancelKeyPress += delegate
+            {
                 // Ensures consoleWriter is always closed when closing the program with Ctrl+C or Ctrl+Break
                 consoleWriter.Dispose();
             };
@@ -167,7 +168,7 @@ namespace GraphSharp
         /// </summary>
         static void CreatePDF(string filename)
         {
-            string pdfFile = @"Resources\"+filename+".pdf";
+            string pdfFile = @"Resources\" + filename + ".pdf";
 
             Document document = new Document(PageSize.A0, 10, 10, 10, 10);
             FileStream fs = new FileStream(pdfFile, FileMode.Create, FileAccess.Write);
@@ -199,30 +200,30 @@ namespace GraphSharp
             Console.WriteLine("| PDF file creation |");
             Console.WriteLine("---------------------\n");
 
-            int maxCircleSize = (int)(document.GetRight(-10) / 2) * 80 /100;
+            int maxCircleSize = (int)(document.GetRight(-10) / 2) * 80 / 100;
             int minCircleSize = 150;
             foreach (int key in kNumbers.Keys.OrderBy(key => key)) // circles for loop
             {
                 // circles creation
                 int circleSize = maxCircleSize / DegenerationNumber * (DegenerationNumber - key) + minCircleSize;
                 cb.SetColorStroke(new BaseColor(183, 3, 223));
-                
+
                 cb.Circle(document.GetRight(-10) / 2, document.GetTop(-10) / 2, circleSize);
                 cb.Stroke();
 
                 double angle = Math.PI * (360.0 / kNumbers[key]) / 180.0; // angle in rad
 
                 int i = 0;
-                foreach(int v in vertexDegenerationTable.Keys)
+                foreach (int v in vertexDegenerationTable.Keys)
                 {
-                    if(vertexDegenerationTable[v] == key)
+                    if (vertexDegenerationTable[v] == key)
                     {
                         // calculate the position of the little circles with initial position and angle
                         double posX = (double)(document.GetRight(-10) / 2 + circleSize * Math.Cos(angle * i));
                         double posY = (double)(document.GetTop(-10) / 2 + circleSize * Math.Sin(angle * i));
 
                         double elemtSize = 75 / DegenerationNumber;
-                        if(elemtSize < 5)
+                        if (elemtSize < 5)
                         {
                             elemtSize = 5;
                         }
@@ -370,7 +371,7 @@ namespace GraphSharp
             }
             consoleWriter.Flush();
 
-            Console.WriteLine("\nThe degeneration number is : "+k);
+            Console.WriteLine("\nThe degeneration number is : " + k);
 
             watch.Stop();
 
@@ -384,9 +385,9 @@ namespace GraphSharp
         static void CompareDegenerationAndChromaticNumber()
         {
             List<List<string>> comparaison = new List<List<string>>();
-            foreach(string file in dataFiles)
+            foreach (string file in dataFiles)
             {
-                if(file != "Flickr")
+                if (file != "Flickr")
                 {
                     // reset
                     graph = new Dictionary<int, List<int>>();
@@ -406,11 +407,11 @@ namespace GraphSharp
                 };
                     comparaison.Add(list);
                 }
-                
+
             }
 
             // display values
-            foreach(List<string> line in comparaison)
+            foreach (List<string> line in comparaison)
             {
                 Console.WriteLine("\nfile : " + line[0] + "\ndegenerationNumber = " + line[1] + "\nchromaticNumber = " + line[2]);
             }
@@ -450,7 +451,7 @@ namespace GraphSharp
             do
             {
                 Console.WriteLine("CHOOSE A FILE :\n");
-                
+
                 for (int i = 0; i < size; i++)
                 {
                     (string fileName, long fileSize) file = orderedFiles[i];

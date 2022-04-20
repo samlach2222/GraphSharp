@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace GraphSharp
 {
@@ -26,7 +24,7 @@ namespace GraphSharp
             for (int i = 0; i < n; i++)
             {
                 color.Add(0);
-                DSAT.Add(0); 
+                DSAT.Add(0);
                 Degree.Add(0);
                 for (int j = 0; j < n; j++)
                 {
@@ -34,8 +32,8 @@ namespace GraphSharp
                     {
                         Degree[i]++;
                     }
-                    
-                } 
+
+                }
                 DSAT[i] = Degree[i];
                 Program.ShowProgression(i + 1, n);
             }
@@ -47,7 +45,7 @@ namespace GraphSharp
                 c = 1;
                 x = DsatMax(); // We choose the vertex of DSAT max not yet coloured
                 while (!SuitableDSAT(x, c)) // We look for the smallest available colour for this vertex
-                { 
+                {
                     c++;
                 }
                 for (int j = 0; j < n; j++) // Updating of DSATs
@@ -87,7 +85,7 @@ namespace GraphSharp
 
         private bool SuitableDSAT(int x, int c) // Test if colour c can be given to vertex x - version for DSATUR
         {
-            for (int i = 0; i < n; i++) 
+            for (int i = 0; i < n; i++)
             {
                 if (adj[x][i] == 1 && (color[i] == c))
                 {
@@ -122,7 +120,7 @@ namespace GraphSharp
                 }
                 Program.ShowProgression(allValues.Count, graphCount);
             }
-            
+
             n = allValues.Max() + 1;
             adj = new int[n][];
 
@@ -147,11 +145,12 @@ namespace GraphSharp
                             adj[i][j] = 0;
                         }
                     }
-                    else {
+                    else
+                    {
                         adj[i][j] = 0;
                     }
                 }
-                Program.ShowProgression(i+1, n);
+                Program.ShowProgression(i + 1, n);
             }
 
             color = new List<int>();
@@ -164,6 +163,6 @@ namespace GraphSharp
             Console.WriteLine();
             Console.WriteLine("DSAT Algorithm : Colouring in " + k + " colours.\n");
         }
-        
+
     }
 }
