@@ -103,6 +103,10 @@ namespace DDR_GraphMix
         /// </summary>
         static void VertexDegenerationFilling()
         {
+            var watch = new System.Diagnostics.Stopwatch();
+
+            watch.Start();
+
             Console.WriteLine("---------------------------------------------------------");
             Console.WriteLine("| Calculating degeneration number and filling the table |");
             Console.WriteLine("---------------------------------------------------------");
@@ -153,8 +157,12 @@ namespace DDR_GraphMix
             }
             consoleWriter.Flush();
 
-            Console.WriteLine("\nThe degeneration number is : " + k + "\n");
+            Console.WriteLine("\nThe degeneration number is : " + k);
             DegenerationNumber = k;
+
+            watch.Stop();
+
+            Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms\n");
         }
 
         /// <summary>
@@ -257,6 +265,10 @@ namespace DDR_GraphMix
         /// </summary>
         static void VertexDegenerationFillingMatulaBeck()
         {
+            var watch = new System.Diagnostics.Stopwatch();
+
+            watch.Start();
+
             Console.WriteLine("---------------------------------------------------------");
             Console.WriteLine("| Calculating degeneration number and filling the table |");
             Console.WriteLine("---------------------------------------------------------");
@@ -361,7 +373,11 @@ namespace DDR_GraphMix
             }
             consoleWriter.Flush();
 
-            Console.WriteLine("\nThe degeneration number is : "+k+"\n");
+            Console.WriteLine("\nThe degeneration number is : "+k);
+
+            watch.Stop();
+
+            Console.WriteLine($"Execution Time: {watch.ElapsedMilliseconds} ms\n");
         }
 
         /// <summary>
