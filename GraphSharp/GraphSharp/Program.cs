@@ -658,15 +658,15 @@ namespace GraphSharp
             Console.Write("Execution Time: ");
             if (hours > 0)
             {
-                Console.Write(hours + "h" + minutes % 60 + "min" + seconds % 60 + "s" + ms % 1000 + "ms\n");
+                Console.Write(hours + "h " + minutes % 60 + "min " + seconds % 60 + "s " + ms % 1000 + "ms\n");
             }
             else if (minutes > 0)
             {
-                Console.Write(minutes + "min" + seconds % 60 + "s" + ms % 1000 + "ms\n");
+                Console.Write(minutes + "min " + seconds % 60 + "s " + ms % 1000 + "ms\n");
             }
             else if (seconds > 0)
             {
-                Console.Write(seconds + "s" + ms % 1000 + "ms\n");
+                Console.Write(seconds + "s " + ms % 1000 + "ms\n");
             }
             else
             {
