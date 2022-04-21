@@ -465,7 +465,7 @@ namespace GraphSharp
                     }
                 }
                 Console.WriteLine();
-                choice = Int32.Parse(Console.ReadLine());
+                int.TryParse(Console.ReadLine(), out choice);
                 if (choice <= 0 || choice > size)
                 {
                     Console.WriteLine("/!\\ BAD VALUE ! /!\\\n");
@@ -505,8 +505,8 @@ namespace GraphSharp
                     {
                         string[] splitedLine = readLine.Split('\t'); // get the two ints of the line
 
-                        int curNode = Int32.Parse(splitedLine[0]);
-                        int nextNode = Int32.Parse(splitedLine[1]);
+                        int curNode = int.Parse(splitedLine[0]);
+                        int nextNode = int.Parse(splitedLine[1]);
 
                         Insert(curNode, nextNode); // insert ints into 
                         Insert(nextNode, curNode); // insert ints into 
@@ -532,7 +532,7 @@ namespace GraphSharp
                 Console.WriteLine("4. Generate a PDF with vertex degeneration\n");
                 Console.WriteLine("5. Compare degeneration and chromatic numbers for a lots of graphs\n");
                 Console.WriteLine("6. Calculate degeneration number with the Matula & Beck algorithm\n");
-                int choice = Int32.Parse(Console.ReadLine());
+                int.TryParse(Console.ReadLine(), out int choice);
 
                 switch (choice)
                 {
