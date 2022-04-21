@@ -112,26 +112,12 @@ namespace GraphSharp
             Console.WriteLine("\r2/4");
             for (int i = 0; i < n; i++)
             {
-                for (int j = 0; j < n; j++)
+                adj[i] = new int[n];
+                if (graph.Keys.Contains(i))
                 {
-                    if (adj[i] == null)
+                    foreach (int j in graph[i])
                     {
-                        adj[i] = new int[n];
-                    }
-                    if (graph.Keys.Contains(i))
-                    {
-                        if (graph[i].Contains(j))
-                        {
-                            adj[i][j] = 1;
-                        }
-                        else
-                        {
-                            adj[i][j] = 0;
-                        }
-                    }
-                    else
-                    {
-                        adj[i][j] = 0;
+                        adj[i][j] = 1;  // No need to set other values to 0, C# already initialize all values to 0
                     }
                 }
                 Program.ShowProgression(i + 1, n);
