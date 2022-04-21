@@ -91,21 +91,33 @@ namespace GraphSharp
             vertexDegenerationTable = new Dictionary<int, int>();
 
             // copy graph
-            Dictionary<int, List<int>> localGraph = graph.ToDictionary(entry => entry.Key, entry => new List<int>(entry.Value));
+            //Dictionary<int, List<int>> localGraph = graph.ToDictionary(entry => entry.Key, entry => new List<int>(entry.Value));
+            int n = graph.Keys.Max() + 1;
+            List<int>[] localGraph = new List<int>[n];
+            for (int i = 0; i < n; i++)
+            {
+                if (graph.Keys.Contains(i))
+                {
+                    localGraph[i] = new List<int>(graph[i]);
+                }
+                else
+                {
+                    localGraph[i] = new List<int>();
+                }
+            }
             int k = 0;
 
-            int localGraphInitialSize = localGraph.Count;
+            int numberRemovedKeys = 0;
 
-            while (localGraph.Count != 0)
+            while (numberRemovedKeys < n)
             {
-                ShowProgression(localGraphInitialSize - localGraph.Count, localGraphInitialSize);
+                ShowProgression(numberRemovedKeys, n);
 
                 // filling a list with all key we have to delete
                 List<int> removeKeys = new List<int>();
-                foreach (int key in localGraph.Keys) // for each keys
+                for (int key = 0; key < n; key++) // for each keys
                 {
-                    List<int> list = localGraph[key]; // get all nextNode of the key
-                    if (list.Count <= k)
+                    if (localGraph[key]?.Count <= k) // get all nextNode of the key
                     {
                         removeKeys.Add(key);
                     }
@@ -114,15 +126,15 @@ namespace GraphSharp
                 // Delete keys and delete values in nextnodes values
                 foreach (int key in removeKeys) // for each keys
                 {
-                    localGraph.Remove(key);
-                    foreach (int row in localGraph.Keys)
+                    localGraph[key] = null;
+                    for (int row = 0; row < n; row++)
                     {
-                        List<int> list = localGraph[row]; // get all nextNode of the key
-                        list.Remove(key);
+                        localGraph[row]?.Remove(key); // get all nextNode of the key
                     }
                     vertexDegenerationTable.Add(key, k);
 
-                    ShowProgression(localGraphInitialSize - localGraph.Count, localGraphInitialSize);
+                    numberRemovedKeys++;
+                    ShowProgression(numberRemovedKeys, n);
                 }
 
                 if (removeKeys.Count == 0)
