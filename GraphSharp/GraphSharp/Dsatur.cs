@@ -105,27 +105,11 @@ namespace GraphSharp
 
             // Filling of adj
 
-            List<int> allValues = new List<int>();
-
-            int graphCount = graph.Count;
-            Console.WriteLine("1/4");
-            foreach (List<int> l in graph.Values)
-            {
-                foreach (int v in l)
-                {
-                    if (!allValues.Contains(v))
-                    {
-                        allValues.Add(v);
-                    }
-                }
-                Program.ShowProgression(allValues.Count, graphCount);
-            }
-
-            n = allValues.Max() + 1;
+            Console.Write("1/4");
+            n = graph.Keys.Max() + 1;
             adj = new int[n][];
 
-            Program.ClearConsoleLines(2);
-            Console.WriteLine("2/4");
+            Console.WriteLine("\r2/4");
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
