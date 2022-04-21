@@ -27,30 +27,12 @@ namespace GraphSharp
             "SisterCities",
             "Youtube"
         });
-
         static int DegenerationNumber = 0;
-        static StreamWriter consoleWriter;
-
-        public static StreamWriter ConsoleWriter => consoleWriter;
+        static sbyte lastPercentage = -1;
 
         static void Main()
         {
-            consoleWriter = new StreamWriter(Console.OpenStandardOutput(), Encoding.UTF8, 12400);
-            Console.CancelKeyPress += delegate
-            {
-                // Ensures consoleWriter is always closed when closing the program with Ctrl+C or Ctrl+Break
-                consoleWriter.Dispose();
-            };
-
-            try
-            {
-                SelectMenu();
-            }
-            finally
-            {
-                // Ensures consoleWriter is always closed whether an exception occurs or not
-                consoleWriter.Dispose();
-            }
+            SelectMenu();
         }
 
         /// <summary>
@@ -152,7 +134,6 @@ namespace GraphSharp
                     k++;
                 }
             }
-            consoleWriter.Flush();
 
             Console.WriteLine("\nThe degeneration number is : " + k);
             DegenerationNumber = k;
@@ -377,7 +358,6 @@ namespace GraphSharp
                     }
                 }
             }
-            consoleWriter.Flush();
 
             Console.WriteLine("\nThe degeneration number is : " + k);
 
@@ -533,7 +513,6 @@ namespace GraphSharp
                     }
                 }
             }
-            consoleWriter.Flush();
             Console.WriteLine();  //Line break
             Console.WriteLine();  //Line break
         }
@@ -615,19 +594,27 @@ namespace GraphSharp
         public static void ShowProgression(int value, int max)
         {
             int pourcentage = value * 100 / max;
-            string barre = "";
-            for (int i = 0; i < 10; i++)
+            if (pourcentage < lastPercentage)  // A new progression is happening
             {
-                if (pourcentage / 10 > i)
-                {
-                    barre += '*';
-                }
-                else
-                {
-                    barre += ' ';
-                }
+                lastPercentage = -1;
             }
-            consoleWriter.Write("\r[" + barre + "] " + pourcentage + '%');
+            if (pourcentage > lastPercentage)
+            {
+                lastPercentage = (sbyte)pourcentage;
+                string barre = "";
+                for (int i = 0; i < 10; i++)
+                {
+                    if (pourcentage / 10 > i)
+                    {
+                        barre += '*';
+                    }
+                    else
+                    {
+                        barre += ' ';
+                    }
+                }
+                Console.Write("\r[" + barre + "] " + pourcentage + '%');
+            }
         }
 
         /// <summary>
@@ -638,19 +625,27 @@ namespace GraphSharp
         public static void ShowProgression(long value, long max)
         {
             long pourcentage = value * 100 / max;
-            string barre = "";
-            for (int i = 0; i < 10; i++)
+            if (pourcentage < lastPercentage)  // A new progression is happening
             {
-                if (pourcentage / 10 > i)
-                {
-                    barre += '*';
-                }
-                else
-                {
-                    barre += ' ';
-                }
+                lastPercentage = -1;
             }
-            consoleWriter.Write("\r[" + barre + "] " + pourcentage + '%');
+            if (pourcentage > lastPercentage)
+            {
+                lastPercentage = (sbyte)pourcentage;
+                string barre = "";
+                for (int i = 0; i < 10; i++)
+                {
+                    if (pourcentage / 10 > i)
+                    {
+                        barre += '*';
+                    }
+                    else
+                    {
+                        barre += ' ';
+                    }
+                }
+                Console.Write("\r[" + barre + "] " + pourcentage + '%');
+            }
         }
 
         /// <summary>
@@ -683,12 +678,11 @@ namespace GraphSharp
         }
 
         /// <summary>
-        /// Flush consoleWriter and clear a specified number of lines in the console
+        /// Clear a specified number of lines in the console
         /// </summary>
         /// <param name="lines">Number of lines to clear</param>
         public static void ClearConsoleLines(int lines)
         {
-            consoleWriter.Flush();
             for (int i = 0; i < lines; i++)
             {
                 Console.CursorLeft = 0;

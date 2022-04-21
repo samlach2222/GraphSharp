@@ -159,7 +159,6 @@ namespace GraphSharp
 
             // DSATUR Calculation
             k = CalculateDsatur();  // The steps 3 and 4 are in the method CalculateDsatur
-            Program.ConsoleWriter.Flush();
             Console.WriteLine();
             Console.WriteLine("DSAT Algorithm : Colouring in " + k + " colours.\n");
         }
