@@ -10,7 +10,7 @@ namespace GraphSharp
         private readonly List<int> color; // Colours for Dsatur
         private readonly List<int> Degree; // Degrees of the vertices
         private readonly int n; // Number of vertices
-        private readonly int[][] adj; //[n][n];  // Graph adjacency matrix
+        private readonly List<int>[] adj; //[n];  // Graph adjacency matrix
         private readonly int k; // k-degeneration
 
         public int K => k;
@@ -26,13 +26,9 @@ namespace GraphSharp
                 color.Add(0);
                 DSAT.Add(0);
                 Degree.Add(0);
-                for (int j = 0; j < n; j++)
+                for (int j = 0; j < adj[i].Count; j++)
                 {
-                    if (adj[i][j] == 1)
-                    {
-                        Degree[i]++;
-                    }
-
+                    Degree[i]++;
                 }
                 DSAT[i] = Degree[i];
                 Program.ShowProgression(i + 1, n);
@@ -48,9 +44,9 @@ namespace GraphSharp
                 {
                     c++;
                 }
-                for (int j = 0; j < n; j++) // Updating of DSATs
+                foreach (int j in adj[x]) // Updating of DSATs
                 {
-                    if (adj[x][j] == 1 && SuitableDSAT(j, c)) // j had no neighbour coloured c, so we increment its DSAT
+                    if (SuitableDSAT(j, c)) // j had no neighbour coloured c, so we increment its DSAT
                     {
                         DSAT[j]++;
                     }
@@ -64,6 +60,7 @@ namespace GraphSharp
 
                 Program.ShowProgression(nb, n);
             }
+
             return cmax;
         }
 
@@ -77,7 +74,8 @@ namespace GraphSharp
                 if (color[i] == 0 && (DSAT[i] > maxDSAT || (DSAT[i] == maxDSAT && Degree[i] > maxDeg)))
                 {
                     maxDSAT = DSAT[i];
-                    maxDeg = Degree[i]; smax = i;
+                    maxDeg = Degree[i];
+                    smax = i;
                 }
             }
             return smax;
@@ -85,9 +83,9 @@ namespace GraphSharp
 
         private bool SuitableDSAT(int x, int c) // Test if colour c can be given to vertex x - version for DSATUR
         {
-            for (int i = 0; i < n; i++)
+            foreach (int i in adj[x])
             {
-                if (adj[x][i] == 1 && (color[i] == c))
+                if (color[i] == c)
                 {
                     return false;
                 }
@@ -107,18 +105,18 @@ namespace GraphSharp
 
             Console.Write("1/4");
             n = graph.Keys.Max() + 1;
-            adj = new int[n][];
+            adj = new List<int>[n];
 
             Console.WriteLine("\r2/4");
             for (int i = 0; i < n; i++)
             {
-                adj[i] = new int[n];
                 if (graph.Keys.Contains(i))
                 {
-                    foreach (int j in graph[i])
-                    {
-                        adj[i][j] = 1;  // No need to set other values to 0, C# already initialize all values to 0
-                    }
+                    adj[i] = new List<int>(graph[i]);
+                }
+                else
+                {
+                    adj[i] = new List<int>();
                 }
                 Program.ShowProgression(i + 1, n);
             }
