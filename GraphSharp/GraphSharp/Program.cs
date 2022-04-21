@@ -35,7 +35,7 @@ namespace GraphSharp
 
         static void Main()
         {
-            consoleWriter = new StreamWriter(Console.OpenStandardOutput(), Encoding.UTF8, 10240);
+            consoleWriter = new StreamWriter(Console.OpenStandardOutput(), Encoding.UTF8, 12400);
             Console.CancelKeyPress += delegate
             {
                 // Ensures consoleWriter is always closed when closing the program with Ctrl+C or Ctrl+Break
