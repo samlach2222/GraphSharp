@@ -387,11 +387,11 @@ namespace GraphSharp
                     int degenerationNumber = DegenerationNumber;
                     int chromaticNumber = d.K;
                     List<string> list = new List<string>
-                {
-                    file,
-                    degenerationNumber.ToString(),
-                    chromaticNumber.ToString()
-                };
+                    {
+                        file,
+                        degenerationNumber.ToString(),
+                        chromaticNumber.ToString()
+                    };
                     comparaison.Add(list);
                 }
 
