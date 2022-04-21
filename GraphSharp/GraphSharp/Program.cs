@@ -82,7 +82,6 @@ namespace GraphSharp
         static void VertexDegenerationFilling()
         {
             Stopwatch watch = new Stopwatch();
-
             watch.Start();
 
             Console.WriteLine("---------------------------------------------------------");
@@ -112,8 +111,6 @@ namespace GraphSharp
                     }
                 }
 
-                int removeKeysCount = removeKeys.Count;
-
                 // Delete keys and delete values in nextnodes values
                 foreach (int key in removeKeys) // for each keys
                 {
@@ -138,7 +135,6 @@ namespace GraphSharp
             DegenerationNumber = k;
 
             watch.Stop();
-
             ShowExecutionTime(watch.ElapsedMilliseconds);
             Console.WriteLine();
         }
