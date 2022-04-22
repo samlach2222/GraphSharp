@@ -107,11 +107,12 @@ namespace GraphSharp
             }
             int k = 0;
 
+            int localGraphInitialSize = n;
             int numberRemovedKeys = 0;
 
-            while (numberRemovedKeys < n)
+            while (numberRemovedKeys < localGraphInitialSize)
             {
-                ShowProgression(numberRemovedKeys, n);
+                ShowProgression(numberRemovedKeys, localGraphInitialSize);
 
                 // filling a list with all key we have to delete
                 List<int> removeKeys = new List<int>();
@@ -134,12 +135,27 @@ namespace GraphSharp
                     vertexDegenerationTable.Add(key, k);
 
                     numberRemovedKeys++;
-                    ShowProgression(numberRemovedKeys, n);
+                    ShowProgression(numberRemovedKeys, localGraphInitialSize);
                 }
 
                 if (removeKeys.Count == 0)
                 {
                     k++;
+                }
+                else if (numberRemovedKeys < localGraphInitialSize)  // Trim localGraph size if possible
+                {
+                    for (int i = n - 1 ; i >= 0; i--)
+                    {
+                        if (localGraph[i] != null)
+                        {
+                            if (i + 1 != n)
+                            {
+                                n = i + 1;
+                                Array.Resize(ref localGraph, n);
+                            }
+                            break;
+                        }
+                    }
                 }
             }
 
