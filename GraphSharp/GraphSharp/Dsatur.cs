@@ -6,9 +6,9 @@ namespace GraphSharp
 {
     public class Dsatur
     {
-        private readonly List<int> DSAT; // Degrees of saturation
-        private readonly List<int> color; // Colours for Dsatur
-        private readonly List<int> Degree; // Degrees of the vertices
+        private readonly int[] DSAT; // Degrees of saturation
+        private readonly int[] color; // Colours for Dsatur
+        private readonly int[] Degree; // Degrees of the vertices
         private readonly int n; // Number of vertices
         private readonly List<int>[] adj; //[n];  // Graph adjacency matrix
         private readonly int k; // k-degeneration
@@ -23,13 +23,7 @@ namespace GraphSharp
             Console.WriteLine("2/3");
             for (int i = 0; i < n; i++)
             {
-                color.Add(0);
-                DSAT.Add(0);
-                Degree.Add(0);
-                for (int j = 0; j < adj[i].Count; j++)
-                {
-                    Degree[i]++;
-                }
+                Degree[i] = adj[i].Count;
                 DSAT[i] = Degree[i];
                 Program.ShowProgression(i + 1, n);
             }
@@ -118,9 +112,9 @@ namespace GraphSharp
                 Program.ShowProgression(i + 1, n);
             }
 
-            color = new List<int>();
-            DSAT = new List<int>();
-            Degree = new List<int>();
+            color = new int[n];
+            DSAT = new int[n];
+            Degree = new int[n];
 
             // DSATUR Calculation
             k = CalculateDsatur();  // The steps 2 and 3 are in the method CalculateDsatur
