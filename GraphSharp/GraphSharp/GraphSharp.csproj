@@ -3,7 +3,12 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netframework4.8</TargetFramework>
+    <ApplicationIcon>Resources\GraphSharp.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\GraphSharp.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="iTextSharp" Version="5.5.13.3" />
