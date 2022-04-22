@@ -458,7 +458,7 @@ namespace GraphSharp
 
             do
             {
-                Console.WriteLine("CHOOSE A FILE :\n");
+                Console.WriteLine("CHOOSE A FILE OR 0 TO GO BACK :\n");
 
                 for (int i = 0; i < size; i++)
                 {
@@ -485,8 +485,8 @@ namespace GraphSharp
                     }
                 }
                 Console.WriteLine();
-                int.TryParse(Console.ReadLine(), out choice);
-                if (choice <= 0 || choice > size)
+                choice = int.TryParse(Console.ReadLine(), out choice) ? choice : -1;
+                if (choice < 0 || choice > size)
                 {
                     Console.WriteLine("/!\\ BAD VALUE ! /!\\\n");
                     returnValue = true;
@@ -499,7 +499,16 @@ namespace GraphSharp
             }
             while (returnValue);
 
-            return orderedFiles[choice - 1].fileName;
+            if (choice == 0)
+            {
+                Console.Clear();
+                return null;
+            }
+            else
+            {
+                return orderedFiles[choice - 1].fileName;
+            }
+
         }
 
         /// <summary>
@@ -565,34 +574,46 @@ namespace GraphSharp
                     case 1:
                         Console.WriteLine();
                         string file1 = SelectFile();
-                        ReadFile(file1);
-                        DisplayGraph();
-                        PauseAndClearScreen();
+                        if (file1 != null)
+                        {
+                            ReadFile(file1);
+                            DisplayGraph();
+                            PauseAndClearScreen();
+                        }
                         returnValue = true;
                         break;
                     case 2:
                         Console.WriteLine();
                         string file2 = SelectFile();
-                        ReadFile(file2);
-                        VertexDegenerationFilling();
-                        PauseAndClearScreen();
+                        if (file2 != null)
+                        {
+                            ReadFile(file2);
+                            VertexDegenerationFilling();
+                            PauseAndClearScreen();
+                        }
                         returnValue = true;
                         break;
                     case 3:
                         Console.WriteLine();
                         string file3 = SelectFile();
-                        ReadFile(file3);
-                        new Dsatur(graph);
-                        PauseAndClearScreen();
+                        if (file3 != null)
+                        {
+                            ReadFile(file3);
+                            new Dsatur(graph);
+                            PauseAndClearScreen();
+                        }
                         returnValue = true;
                         break;
                     case 4:
                         Console.WriteLine();
                         string file4 = SelectFile();
-                        ReadFile(file4);
-                        VertexDegenerationFilling();
-                        CreatePDF(file4);
-                        PauseAndClearScreen();
+                        if (file4 != null)
+                        {
+                            ReadFile(file4);
+                            VertexDegenerationFilling();
+                            CreatePDF(file4);
+                            PauseAndClearScreen();
+                        }
                         returnValue = true;
                         break;
                     case 5:
@@ -604,9 +625,12 @@ namespace GraphSharp
                     case 6:
                         Console.WriteLine();
                         string file5 = SelectFile();
-                        ReadFile(file5);
-                        VertexDegenerationFillingMatulaBeck();
-                        PauseAndClearScreen();
+                        if (file5 != null)
+                        {
+                            ReadFile(file5);
+                            VertexDegenerationFillingMatulaBeck();
+                            PauseAndClearScreen();
+                        }
                         returnValue = true;
                         break;
                     default:
