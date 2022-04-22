@@ -125,13 +125,16 @@ namespace GraphSharp
                 }
 
                 // Delete keys and delete values in nextnodes values
-                foreach (int key in removeKeys) // for each keys
+                foreach (int key in removeKeys) // For each keys to remove
                 {
-                    localGraph[key] = null;
-                    for (int row = 0; row < n; row++)
+                    foreach (int neighborOfKey in localGraph[key]) // For each neighbors of the keys to remove
                     {
-                        localGraph[row]?.Remove(key); // get all nextNode of the key
+                        if (neighborOfKey != key) // If the node is self-linking it will be removed when setting its neighbors to null
+                        {
+                            localGraph[neighborOfKey].Remove(key);
+                        }
                     }
+                    localGraph[key] = null;
                     vertexDegenerationTable.Add(key, k);
 
                     numberRemovedKeys++;
