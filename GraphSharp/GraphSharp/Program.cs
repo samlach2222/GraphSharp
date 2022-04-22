@@ -514,6 +514,7 @@ namespace GraphSharp
             Console.WriteLine("| Filling in the table from the file |");
             Console.WriteLine("--------------------------------------");
 
+            lastPercentage = -1; // Some files are immediately 100% loaded
             using (StreamReader streamReader = new StreamReader(@"Resources\" + file))
             {
                 long fileLength = streamReader.BaseStream.Length;
@@ -546,36 +547,44 @@ namespace GraphSharp
             do
             {
                 Console.WriteLine("WELCOME TO OUR GRAPH PROJECT, CHOOSE AN OPTION IN THE LIST :\n");
+                Console.WriteLine("0. Quit\n");
                 Console.WriteLine("1. Display the graph\n");
                 Console.WriteLine("2. Calculate degeneration number\n");
                 Console.WriteLine("3. Calculate chromatic number\n");
                 Console.WriteLine("4. Generate a PDF with vertex degeneration\n");
                 Console.WriteLine("5. Compare degeneration and chromatic numbers for a lots of graphs\n");
                 Console.WriteLine("6. Calculate degeneration number with the Matula & Beck algorithm\n");
-                int.TryParse(Console.ReadLine(), out int choice);
+                int choice = int.TryParse(Console.ReadLine(), out choice) ? choice : -1;
 
                 switch (choice)
                 {
+                    case 0:
+                        Console.WriteLine();
+                        returnValue = false;
+                        break;
                     case 1:
                         Console.WriteLine();
                         string file1 = SelectFile();
                         ReadFile(file1);
                         DisplayGraph();
-                        returnValue = false;
+                        PauseAndClearScreen();
+                        returnValue = true;
                         break;
                     case 2:
                         Console.WriteLine();
                         string file2 = SelectFile();
                         ReadFile(file2);
                         VertexDegenerationFilling();
-                        returnValue = false;
+                        PauseAndClearScreen();
+                        returnValue = true;
                         break;
                     case 3:
                         Console.WriteLine();
                         string file3 = SelectFile();
                         ReadFile(file3);
                         new Dsatur(graph);
-                        returnValue = false;
+                        PauseAndClearScreen();
+                        returnValue = true;
                         break;
                     case 4:
                         Console.WriteLine();
@@ -583,19 +592,22 @@ namespace GraphSharp
                         ReadFile(file4);
                         VertexDegenerationFilling();
                         CreatePDF(file4);
-                        returnValue = false;
+                        PauseAndClearScreen();
+                        returnValue = true;
                         break;
                     case 5:
                         Console.WriteLine();
                         CompareDegenerationAndChromaticNumber();
-                        returnValue = false;
+                        PauseAndClearScreen();
+                        returnValue = true;
                         break;
                     case 6:
                         Console.WriteLine();
                         string file5 = SelectFile();
                         ReadFile(file5);
                         VertexDegenerationFillingMatulaBeck();
-                        returnValue = false;
+                        PauseAndClearScreen();
+                        returnValue = true;
                         break;
                     default:
                         Console.WriteLine("/!\\ BAD VALUE ! /!\\\n");
@@ -712,6 +724,16 @@ namespace GraphSharp
                     Console.CursorTop -= 1;
                 }
             }
+        }
+
+        /// <summary>
+        /// Pause the console and clear it after a key is pressed
+        /// </summary>
+        public static void PauseAndClearScreen()
+        {
+            Console.Write("\nPress any key to continue...");
+            Console.ReadKey(true);
+            Console.Clear();
         }
     }
 }
