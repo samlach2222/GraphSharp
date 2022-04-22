@@ -90,6 +90,7 @@ namespace GraphSharp
             Console.WriteLine("---------------------------------------------------------");
 
             vertexDegenerationTable = new Dictionary<int, int>();
+            int numberRemovedKeys = 0;
 
             // copy graph
             //Dictionary<int, List<int>> localGraph = graph.ToDictionary(entry => entry.Key, entry => new List<int>(entry.Value));
@@ -103,12 +104,11 @@ namespace GraphSharp
                 }
                 else
                 {
-                    localGraph[i] = new List<int>();
+                    localGraph[i] = null;
+                    numberRemovedKeys++;
                 }
             }
             int k = 0;
-
-            int numberRemovedKeys = 0;
 
             while (numberRemovedKeys < n)
             {
