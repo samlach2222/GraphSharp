@@ -176,6 +176,7 @@ namespace GraphSharp
 
             // create table k --> number of k-degeneration
             Dictionary<int, int> kNumbers = new Dictionary<int, int>();
+            int vertexDegenerationTableKeysMax = vertexDegenerationTable.Keys.Max();
             foreach (int key in vertexDegenerationTable.Keys.OrderBy(key => key))
             {
                 if (!kNumbers.ContainsKey(vertexDegenerationTable[key]))
@@ -186,14 +187,16 @@ namespace GraphSharp
                 {
                     kNumbers[vertexDegenerationTable[key]]++;
                 }
+                ShowProgression(key, vertexDegenerationTableKeysMax);
             }
 
-            Console.WriteLine("---------------------");
+            Console.WriteLine("\n---------------------");
             Console.WriteLine("| PDF file creation |");
-            Console.WriteLine("---------------------\n");
+            Console.WriteLine("---------------------");
 
             int maxCircleSize = (int)(document.GetRight(-10) / 2) * 80 / 100;
             int minCircleSize = 150;
+            int kNumbersKeysMax = kNumbers.Keys.Max();
             foreach (int key in kNumbers.Keys.OrderBy(key => key)) // circles for loop
             {
                 // circles creation
@@ -235,7 +238,11 @@ namespace GraphSharp
                         i++;
                     }
                 }
+                ShowProgression(key, kNumbersKeysMax);
             }
+            Console.WriteLine("\n---------------------------------");
+            Console.WriteLine("| Exporting and opening the PDF |");
+            Console.WriteLine("---------------------------------");
             document.Close();
             fs.Close();
             writer.Close();
@@ -248,6 +255,8 @@ namespace GraphSharp
                     UseShellExecute = true
                 }
             }.Start();
+
+            Console.WriteLine();
         }
 
         /// <summary>
