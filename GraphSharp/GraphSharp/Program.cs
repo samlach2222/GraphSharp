@@ -423,6 +423,7 @@ namespace GraphSharp
             {
                 Console.WriteLine("\nfile : " + line[0] + "\ndegenerationNumber = " + line[1] + "\nchromaticNumber = " + line[2]);
             }
+            Console.WriteLine();
         }
 
         /// <summary>
