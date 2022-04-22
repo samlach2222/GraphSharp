@@ -123,7 +123,7 @@ namespace GraphSharp
             Degree = new List<int>();
 
             // DSATUR Calculation
-            k = CalculateDsatur();  // The steps 3 and 4 are in the method CalculateDsatur
+            k = CalculateDsatur();  // The steps 2 and 3 are in the method CalculateDsatur
             Console.WriteLine();
             Console.WriteLine("DSAT Algorithm : Colouring in " + k + " colours.\n");
         }
