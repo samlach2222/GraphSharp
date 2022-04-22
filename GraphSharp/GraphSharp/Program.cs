@@ -275,38 +275,29 @@ namespace GraphSharp
             //Initialize an output list L
             vertexDegenerationTableMatulaBeck = new Dictionary<int, List<int>>();
 
+            Console.WriteLine("1/2");
             //Compute a number dv for each vertex v in G, the number of neighbors of v that are not already in L. Initially, these numbers are just the degrees of the vertices
+            //Initialize an array D such that D[i] contains a list of the vertices v that are not already in L for which dv = i
             int[] d = new int[graph.Keys.Max() + 1];
-            for (int j = 0; j < d.Length; j++)
+            int BiggestI = graph.Max(x => x.Value.Count);
+            int DInitialNumberOfElements = 0;
+            int dLength = d.Length;
+            List<int>[] D = new List<int>[BiggestI + 1];
+            for (int j = 0; j < BiggestI + 1; j++)  // Initialise D
+            {
+                D[j] = new List<int>();
+            }
+            for (int j = 0; j < dLength; j++)
             {
                 d[j] = -1;
                 if (graph.ContainsKey(j))
                 {
                     d[j] = graph[j].Count;
-                }
-            }
-
-            int BiggestI = d.Max();
-            int DInitialNumberOfElements = 0;
-
-            Console.WriteLine("1/2");
-            //Initialize an array D such that D[i] contains a list of the vertices v that are not already in L for which dv = i
-            List<int>[] D = new List<int>[BiggestI + 1];
-            for (int j = 0; j <= BiggestI; j++)
-            {
-                ShowProgression(j, BiggestI);
-
-                List<int> DjList = new List<int>();
-                for (int key = 0; key < d.Length; key++)
-                {
-                    if (d[key] == j)
-                    {
-                        DjList.Add(key);
-                        DInitialNumberOfElements++;
-                    }
+                    DInitialNumberOfElements++;
+                    D[d[j]].Add(j);
                 }
 
-                D[j] = DjList;
+                ShowProgression(j + 1, dLength);
             }
 
             //Initialize k to 0
