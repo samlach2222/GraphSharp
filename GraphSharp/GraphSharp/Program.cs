@@ -19,6 +19,7 @@ namespace GraphSharp
             "Crime",
             "ERoadNetworks",
             "Exemple",
+            "ExempleLooping",
             "Facebook",
             "Flickr",
             "JazzMusicians",
