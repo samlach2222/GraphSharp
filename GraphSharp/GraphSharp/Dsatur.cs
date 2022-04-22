@@ -20,7 +20,7 @@ namespace GraphSharp
             int nb = 0, c, x, cmax = 0;
 
             Program.ClearConsoleLines(2);
-            Console.WriteLine("3/4");
+            Console.WriteLine("2/3");
             for (int i = 0; i < n; i++)
             {
                 color.Add(0);
@@ -35,7 +35,7 @@ namespace GraphSharp
             }
 
             Program.ClearConsoleLines(2);
-            Console.WriteLine("4/4");
+            Console.WriteLine("3/3");
             while (nb < n)  // As long as we have not coloured all the vertices
             {
                 c = 1;
@@ -102,12 +102,9 @@ namespace GraphSharp
             //int nbc;
 
             // Filling of adj
-
-            Console.Write("1/4");
+            Console.WriteLine("1/3");
             n = graph.Keys.Max() + 1;
             adj = new List<int>[n];
-
-            Console.WriteLine("\r2/4");
             for (int i = 0; i < n; i++)
             {
                 if (graph.Keys.Contains(i))
