@@ -1,4 +1,6 @@
-﻿using iTextSharp.text;
+﻿using ICSharpCode.SharpZipLib.BZip2;
+using ICSharpCode.SharpZipLib.Tar;
+using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
@@ -6,6 +8,9 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using Document = iTextSharp.text.Document;
 
 namespace GraphSharp
@@ -25,7 +30,8 @@ namespace GraphSharp
             "JazzMusicians",
             "PoliticalBooks",
             "SisterCities",
-            "Youtube"
+            "Youtube",
+            "UK-Domains",
         });
         static int DegenerationNumber = 0;
         static sbyte lastPercentage = -1;
@@ -379,14 +385,14 @@ namespace GraphSharp
         }
 
         /// <summary>
-        /// Calculate degeneration and chromatic numbers of all the files (except Flickr) and compare them at the end
+        /// Calculate degeneration and chromatic numbers of all the files (except UK-Domains) and compare them at the end
         /// </summary>
         static void CompareDegenerationAndChromaticNumber()
         {
             List<List<string>> comparaison = new List<List<string>>();
             foreach (string file in dataFiles)
             {
-                if (file != "Flickr")
+                if (file != "UK-Domains")
                 {
                     // reset
                     graph = new Dictionary<int, List<int>>();
@@ -432,8 +438,16 @@ namespace GraphSharp
             for (int i = 0; i < size; i++)
             {
                 string fileName = @"Resources\" + dataFiles[i];
-                FileInfo fi = new FileInfo(fileName);
-                long fileSize = fi.Length;
+                long fileSize;
+                if (dataFiles[i] == "UK-Domains")
+                {
+                    fileSize = 80000000000000; // very big number to be the last
+                }
+                else
+                {
+                    FileInfo fi = new FileInfo(fileName);
+                    fileSize = fi.Length;
+                }
 
                 int index = orderedFiles.Count;
                 for (int j = 0; j < orderedFiles.Count; j++)
@@ -457,23 +471,42 @@ namespace GraphSharp
                     (string fileName, long fileSize) file = orderedFiles[i];
                     string fileName = @"Resources\" + file.fileName;
 
-                    string tabulation = "\t";
-                    if (fileName.Length < 11 + 7) // 11 is for the Resources\\
+                    if (file.fileName == "UK-Domains") // last element
                     {
-                        tabulation = "\t\t";
-                    }
-
-                    if (file.fileSize < 1024)
-                    {
-                        Console.WriteLine((i + 1) + ". \t" + file.fileName + tabulation + file.fileSize + "o");
-                    }
-                    else if (file.fileSize < 1048576)
-                    {
-                        Console.WriteLine((i + 1) + ". \t" + file.fileName + tabulation + Math.Round((double)file.fileSize / 1024, 1) + "Ko");
+                        string tabulation = "\t";
+                        if (fileName.Length < 11 + 7) // 11 is for the Resources\\
+                        {
+                            tabulation = "\t\t";
+                        }
+                        if (!File.Exists("Resources/UK-Domains")) // if the file dont exist
+                        {
+                            Console.WriteLine((i + 1) + ". \t" + file.fileName + tabulation + "4,2Go \t [6 Go RAM needed + Download]");
+                        }
+                        else
+                        {
+                            Console.WriteLine((i + 1) + ". \t" + file.fileName + tabulation + "4,2Go \t [6 Go RAM needed]");
+                        }
                     }
                     else
                     {
-                        Console.WriteLine((i + 1) + ". \t" + file.fileName + tabulation + Math.Round((double)file.fileSize / 1048576, 1) + "Mo");
+                        string tabulation = "\t";
+                        if (fileName.Length < 11 + 7) // 11 is for the Resources\\
+                        {
+                            tabulation = "\t\t";
+                        }
+
+                        if (file.fileSize < 1024)
+                        {
+                            Console.WriteLine((i + 1) + ". \t" + file.fileName + tabulation + file.fileSize + "o");
+                        }
+                        else if (file.fileSize < 1048576)
+                        {
+                            Console.WriteLine((i + 1) + ". \t" + file.fileName + tabulation + Math.Round((double)file.fileSize / 1024, 1) + "Ko");
+                        }
+                        else
+                        {
+                            Console.WriteLine((i + 1) + ". \t" + file.fileName + tabulation + Math.Round((double)file.fileSize / 1048576, 1) + "Mo");
+                        }
                     }
                 }
                 Console.WriteLine();
@@ -496,11 +529,48 @@ namespace GraphSharp
                 Console.Clear();
                 return null;
             }
+            else if(choice == size) // last file, to download
+            {
+                if (!File.Exists("Resources/UK-Domains")) // if the file dont exist
+                {
+                    DownloadAndTreatVeryBigFileAsync();
+                }
+                return orderedFiles[choice - 1].fileName;
+            }  
             else
             {
                 return orderedFiles[choice - 1].fileName;
             }
+        }
 
+        static async Task DownloadAndTreatVeryBigFileAsync()
+        {
+            using (var client = new WebClient())
+            {
+                using (var completedSignal = new AutoResetEvent(false))
+                {
+                    client.DownloadFileCompleted += (s, e) =>
+                    {
+                        Console.WriteLine("\nDownload file completed.");
+                        completedSignal.Set();
+                    };
+
+                    client.DownloadProgressChanged += (s, e) => Console.Write("\rDownloading " + e.ProgressPercentage + "%");
+                    client.DownloadFileAsync(new Uri("http://konect.cc/files/download.tsv.dimacs10-uk-2002.tar.bz2"), "Resources/download.tsv.dimacs10-uk-2002.tar.bz2");
+
+                    completedSignal.WaitOne();
+                }
+            }
+            Console.WriteLine("Extracting!");
+            BZip2InputStream bz2is = new BZip2InputStream(File.OpenRead("Resources/download.tsv.dimacs10-uk-2002.tar.bz2"));
+            TarArchive tarArchive = TarArchive.CreateInputTarArchive(bz2is);
+            tarArchive.ExtractContents("Resources/");
+            tarArchive.Close();
+            File.Move("Resources/dimacs10-uk-2002/out.dimacs10-uk-2002", "Resources/UK-Domains");
+            Directory.Delete("Resources/dimacs10-uk-2002", true);
+            bz2is.Close();
+            File.Delete("Resources/download.tsv.dimacs10-uk-2002.tar.bz2");
+            Console.WriteLine("Done !");
         }
 
         /// <summary>
