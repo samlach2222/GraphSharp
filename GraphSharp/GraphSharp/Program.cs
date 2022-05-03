@@ -441,7 +441,7 @@ namespace GraphSharp
                 long fileSize;
                 if (dataFiles[i] == "UK-Domains")
                 {
-                    fileSize = 80000000000000; // very big number to be the last
+                    fileSize = long.MaxValue; // very big number to be the last
                 }
                 else
                 {
@@ -480,11 +480,11 @@ namespace GraphSharp
                         }
                         if (!File.Exists("Resources/UK-Domains")) // if the file dont exist
                         {
-                            Console.WriteLine((i + 1) + ". \t" + file.fileName + tabulation + "4,2Go \t [6 Go RAM needed + Download]");
+                            Console.WriteLine((i + 1) + ".\t" + file.fileName + tabulation + "4,2Go\t[6 Go RAM needed + Download]");
                         }
                         else
                         {
-                            Console.WriteLine((i + 1) + ". \t" + file.fileName + tabulation + "4,2Go \t [6 Go RAM needed]");
+                            Console.WriteLine((i + 1) + ".\t" + file.fileName + tabulation + "4,2Go\t[6 Go RAM needed]");
                         }
                     }
                     else
@@ -497,15 +497,15 @@ namespace GraphSharp
 
                         if (file.fileSize < 1024)
                         {
-                            Console.WriteLine((i + 1) + ". \t" + file.fileName + tabulation + file.fileSize + "o");
+                            Console.WriteLine((i + 1) + ".\t" + file.fileName + tabulation + file.fileSize + "o");
                         }
                         else if (file.fileSize < 1048576)
                         {
-                            Console.WriteLine((i + 1) + ". \t" + file.fileName + tabulation + Math.Round((double)file.fileSize / 1024, 1) + "Ko");
+                            Console.WriteLine((i + 1) + ".\t" + file.fileName + tabulation + Math.Round((double)file.fileSize / 1024, 1) + "Ko");
                         }
                         else
                         {
-                            Console.WriteLine((i + 1) + ". \t" + file.fileName + tabulation + Math.Round((double)file.fileSize / 1048576, 1) + "Mo");
+                            Console.WriteLine((i + 1) + ".\t" + file.fileName + tabulation + Math.Round((double)file.fileSize / 1048576, 1) + "Mo");
                         }
                     }
                 }
@@ -529,14 +529,14 @@ namespace GraphSharp
                 Console.Clear();
                 return null;
             }
-            else if(choice == size) // last file, to download
+            else if (choice == size) // last file, to download
             {
                 if (!File.Exists("Resources/UK-Domains")) // if the file dont exist
                 {
                     DownloadAndTreatVeryBigFileAsync();
                 }
                 return orderedFiles[choice - 1].fileName;
-            }  
+            }
             else
             {
                 return orderedFiles[choice - 1].fileName;
