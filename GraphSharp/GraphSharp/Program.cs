@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
-using System.Threading.Tasks;
 using Document = iTextSharp.text.Document;
 
 namespace GraphSharp
@@ -480,7 +479,7 @@ namespace GraphSharp
                         }
                         if (!File.Exists("Resources/UK-Domains")) // if the file dont exist
                         {
-                            Console.WriteLine((i + 1) + ".\t" + file.fileName + tabulation + "4,2Go\t[6 Go RAM needed + Download]");
+                            Console.WriteLine((i + 1) + ".\t" + file.fileName + tabulation + "4,2Go\t[6 Go RAM needed + 504Mo Download]");
                         }
                         else
                         {
@@ -533,7 +532,7 @@ namespace GraphSharp
             {
                 if (!File.Exists("Resources/UK-Domains")) // if the file dont exist
                 {
-                    DownloadAndTreatVeryBigFileAsync();
+                    DownloadAndTreatVeryBigFile();
                 }
                 return orderedFiles[choice - 1].fileName;
             }
@@ -543,34 +542,39 @@ namespace GraphSharp
             }
         }
 
-        static async Task DownloadAndTreatVeryBigFileAsync()
+        static void DownloadAndTreatVeryBigFile()
         {
-            using (var client = new WebClient())
+            if (!File.Exists("Resources/download.tsv.dimacs10-uk-2002.tar.bz2") || new FileInfo("Resources/download.tsv.dimacs10-uk-2002.tar.bz2").Length < 528152876)  //Download only if the file isn't already downloaded
             {
-                using (var completedSignal = new AutoResetEvent(false))
+                Console.WriteLine("Downloading...");
+                using (var client = new WebClient())
                 {
-                    client.DownloadFileCompleted += (s, e) =>
+                    using (var completedSignal = new AutoResetEvent(false))
                     {
-                        Console.WriteLine("\nDownload file completed.");
-                        completedSignal.Set();
-                    };
+                        client.DownloadFileCompleted += (s, e) =>
+                        {
+                            completedSignal.Set();
+                        };
 
-                    client.DownloadProgressChanged += (s, e) => Console.Write("\rDownloading " + e.ProgressPercentage + "%");
-                    client.DownloadFileAsync(new Uri("http://konect.cc/files/download.tsv.dimacs10-uk-2002.tar.bz2"), "Resources/download.tsv.dimacs10-uk-2002.tar.bz2");
+                        client.DownloadProgressChanged += (s, e) => ShowProgression(e.ProgressPercentage, 100);
+                        client.DownloadFileAsync(new Uri("http://konect.cc/files/download.tsv.dimacs10-uk-2002.tar.bz2"), "Resources/download.tsv.dimacs10-uk-2002.tar.bz2");
 
-                    completedSignal.WaitOne();
+                        completedSignal.WaitOne();
+                    }
                 }
+                Console.WriteLine("\n");
             }
-            Console.WriteLine("Extracting!");
+
+            Console.WriteLine("Extracting...");
             BZip2InputStream bz2is = new BZip2InputStream(File.OpenRead("Resources/download.tsv.dimacs10-uk-2002.tar.bz2"));
-            TarArchive tarArchive = TarArchive.CreateInputTarArchive(bz2is);
+            TarArchive tarArchive = TarArchive.CreateInputTarArchive(bz2is, null);
             tarArchive.ExtractContents("Resources/");
             tarArchive.Close();
             File.Move("Resources/dimacs10-uk-2002/out.dimacs10-uk-2002", "Resources/UK-Domains");
             Directory.Delete("Resources/dimacs10-uk-2002", true);
             bz2is.Close();
             File.Delete("Resources/download.tsv.dimacs10-uk-2002.tar.bz2");
-            Console.WriteLine("Done !");
+            Console.WriteLine("Done !\n");
         }
 
         /// <summary>
