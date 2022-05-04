@@ -21,7 +21,6 @@ namespace GraphSharp
         static Dictionary<int, List<int>> vertexDegenerationTableMatulaBeck;
         static readonly ReadOnlyCollection<string> dataFiles = new ReadOnlyCollection<string>(new string[] {
             "Crime",
-            "ERoadNetworks",
             "Exemple",
             "ExempleLooping",
             "Facebook",
@@ -479,11 +478,11 @@ namespace GraphSharp
                         }
                         if (!File.Exists("Resources/UK-Domains")) // if the file dont exist
                         {
-                            Console.WriteLine((i + 1) + ".\t" + file.fileName + tabulation + "4,2Go\t[6 Go RAM needed + 504Mo Download]");
+                            Console.WriteLine((i + 1) + ".\t" + file.fileName + tabulation + "4Go\t[6 Go RAM needed + 504Mo Download]");
                         }
                         else
                         {
-                            Console.WriteLine((i + 1) + ".\t" + file.fileName + tabulation + "4,2Go\t[6 Go RAM needed]");
+                            Console.WriteLine((i + 1) + ".\t" + file.fileName + tabulation + "4Go\t[6 Go RAM needed]");
                         }
                     }
                     else

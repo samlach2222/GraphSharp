@@ -20,9 +20,6 @@
     <None Update="Resources\Crime">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\ERoadNetworks">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Resources\Exemple">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
