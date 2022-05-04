@@ -390,7 +390,7 @@ namespace GraphSharp
             List<List<string>> comparaison = new List<List<string>>();
             foreach (string file in dataFiles)
             {
-                if (file != "UK-Domains")
+                if (file != "UK-Domains" && file != "Flickr")
                 {
                     // reset
                     graph = new Dictionary<int, List<int>>();
